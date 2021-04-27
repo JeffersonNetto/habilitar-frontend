@@ -229,15 +229,16 @@ const ExercicioForm = () => {
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Salvar
-          </Button>
+          <Box textAlign="center">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Salvar
+            </Button>
+          </Box>
         </form>
       </div>
       <Box display="flex" justifyContent="center">

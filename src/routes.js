@@ -8,6 +8,7 @@ import UsuarioForm from "./pages/Usuario/UsuarioForm";
 import Exercicios from "./pages/Exercicio/Exercicios";
 import ExercicioForm from "./pages/Exercicio/ExercicioForm";
 import Metricas from "./pages/Metrica/Metricas";
+import MetricaForm from "./pages/Metrica/MetricaForm";
 
 export function Rotas() {
   return (
@@ -67,7 +68,7 @@ export function RotasInternas() {
         exact
         isPrivate={true}
         path="/app/metricas/editar/:id"
-        component={ExercicioForm}
+        component={MetricaForm}
       />
     </Switch>
   );
