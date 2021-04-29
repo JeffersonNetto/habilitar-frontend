@@ -9,6 +9,8 @@ import Exercicios from "./pages/Exercicio/Exercicios";
 import ExercicioForm from "./pages/Exercicio/ExercicioForm";
 import Metricas from "./pages/Metrica/Metricas";
 import MetricaForm from "./pages/Metrica/MetricaForm";
+import IntervaloForm from "./pages/Intervalo/IntervaloForm";
+import Intervalos from "./pages/Intervalo/Intervalos";
 
 export function Rotas() {
   return (
@@ -69,6 +71,18 @@ export function RotasInternas() {
         isPrivate={true}
         path="/app/metricas/editar/:id"
         component={MetricaForm}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/intervalos"
+        component={Intervalos}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/intervalos/editar/:id"
+        component={IntervaloForm}
       />
     </Switch>
   );
