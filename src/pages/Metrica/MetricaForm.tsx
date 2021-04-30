@@ -166,7 +166,7 @@ const MetricaForm = () => {
 
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Exercício
+          Métrica
         </Typography>
         <form className={classes.form} onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>

@@ -9,42 +9,88 @@ import LayersIcon from "@material-ui/icons/Layers";
 export const mainListItems = (
   <div>
     <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <NavLink to="/app/usuarios">
+      <Link
+        to="/app/usuarios"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+      </Link>
+      <Link
+        to="/app/usuarios"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
         <ListItemText primary="Usuários" />
-      </NavLink>
+      </Link>
     </ListItem>
+
     <ListItem button>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <Link to="/app/exercicios">
+      <Link
+        to="/app/exercicios"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+      </Link>
+      <Link
+        to="/app/exercicios"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
         <ListItemText primary="Exercícios" />
       </Link>
     </ListItem>
+
     <ListItem button>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <Link to="/app/metricas">
+      <Link
+        to="/app/metricas"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+      </Link>
+      <Link
+        to="/app/metricas"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
         <ListItemText primary="Métricas" />
       </Link>
     </ListItem>
+
     <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <Link to="/app/intervalos">
+      <Link
+        to="/app/intervalos"
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+      </Link>
+      <Link
+        to="/app/intervalos"
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
         <ListItemText primary="Intervalos" />
       </Link>
     </ListItem>
+
     <ListItem button>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
+      <Link
+        to="/app/empresas"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+      </Link>
+      <Link
+        to="/app/empresas"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <ListItemText primary="Empresas" />
+      </Link>
     </ListItem>
   </div>
 );

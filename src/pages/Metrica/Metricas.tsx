@@ -75,7 +75,7 @@ const Metricas = () => {
         nome={metricaExcluir?.Descricao}
       />
       <MaterialTable
-        title="Exercícios"
+        title="Métricas"
         data={metricas}
         columns={columns}
         localization={localization}

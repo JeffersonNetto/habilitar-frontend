@@ -16,8 +16,8 @@ import { Context } from "../../context/AuthContext";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { useLocation } from "react-router";
-import IntervaloService from "../../services/IntervaloService";
-import Intervalo from "../../models/Intervalo";
+import EmpresaService from "../../services/EmpresaService";
+import Empresa from "../../models/Empresa";
 
 const validationSchema = yup.object({
   descricao: yup.string().required("Informe uma descrição"),
@@ -43,11 +43,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let stateIntervalo: Intervalo;
+let stateEmpresa: Empresa;
 
-const IntervaloForm = () => {
+const EmpresaForm = () => {
   const classes = useStyles();
-  const { Insert, Update } = IntervaloService();
+  const { Insert, Update } = EmpresaService();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<any>({
@@ -60,7 +60,7 @@ const IntervaloForm = () => {
   const { pathname, state } = useLocation();
 
   if (pathname.includes("editar")) {
-    stateIntervalo = state as Intervalo;
+    stateEmpresa = state as Empresa;
   }
 
   useEffect(() => {
@@ -79,22 +79,26 @@ const IntervaloForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      descricao: stateIntervalo.Descricao,
+      nomeFantasia: stateEmpresa.NomeFantasia,
+      razaoSocial: stateEmpresa.RazaoSocial,
+      cnpj: stateEmpresa.Cnpj,
     },
     onSubmit: (values) => {
       setLoading(true);
-      const intervalo: Intervalo = {
-        Descricao: values.descricao,
+      const empresa: Empresa = {
+        NomeFantasia: values.nomeFantasia,
+        RazaoSocial: values.razaoSocial,
+        Cnpj: values.cnpj,
         Ativo: true,
         DataCriacao: new Date(),
         Ip: ip,
         UsuarioCriacaoId: usuarioLogado?.Id,
-        Id: stateIntervalo.Id || 0,
+        Id: stateEmpresa.Id || 0,
       };
 
       if (pathname.includes("editar")) {
-        Update(intervalo.Id, intervalo)
-          .then((response: SuccessResponse<Intervalo>) => {
+        Update(empresa.Id, empresa)
+          .then((response: SuccessResponse<Empresa>) => {
             setAlertMessage({
               severity: "success",
               mensagem: response.Mensagem,
@@ -116,8 +120,8 @@ const IntervaloForm = () => {
       }
 
       if (pathname.includes("criar")) {
-        Insert(intervalo)
-          .then((response: SuccessResponse<Intervalo>) => {
+        Insert(empresa)
+          .then((response: SuccessResponse<Empresa>) => {
             setAlertMessage({
               severity: "success",
               mensagem: response.Mensagem,
@@ -162,25 +166,63 @@ const IntervaloForm = () => {
 
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Intervalo
+          Empresa
         </Typography>
         <form className={classes.form} onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="descricao"
-                name="descricao"
+                autoComplete="nomeFantasia"
+                name="nomeFantasia"
                 variant="outlined"
                 fullWidth
-                id="descricao"
-                label="Descrição"
+                id="nomeFantasia"
+                label="Nome Fantasia"
                 autoFocus
-                value={formik.values.descricao}
+                value={formik.values.nomeFantasia}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.descricao && Boolean(formik.errors.descricao)
+                  formik.touched.nomeFantasia &&
+                  Boolean(formik.errors.nomeFantasia)
                 }
-                helperText={formik.touched.descricao && formik.errors.descricao}
+                helperText={
+                  formik.touched.nomeFantasia && formik.errors.nomeFantasia
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="razaoSocial"
+                name="razaoSocial"
+                variant="outlined"
+                fullWidth
+                id="razaoSocial"
+                label="Razão Social"
+                autoFocus
+                value={formik.values.razaoSocial}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.razaoSocial &&
+                  Boolean(formik.errors.razaoSocial)
+                }
+                helperText={
+                  formik.touched.razaoSocial && formik.errors.razaoSocial
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="cnpj"
+                name="cnpj"
+                variant="outlined"
+                fullWidth
+                id="cnpj"
+                label="CNPJ"
+                autoFocus
+                value={formik.values.cnpj}
+                onChange={formik.handleChange}
+                error={formik.touched.cnpj && Boolean(formik.errors.cnpj)}
+                helperText={formik.touched.cnpj && formik.errors.cnpj}
               />
             </Grid>
           </Grid>
@@ -203,4 +245,4 @@ const IntervaloForm = () => {
   );
 };
 
-export default IntervaloForm;
+export default EmpresaForm;

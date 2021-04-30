@@ -5,17 +5,15 @@ import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
 import { useHistory } from "react-router";
 import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
-import Intervalo from "../../models/Intervalo";
-import IntervaloService from "../../services/IntervaloService";
+import Empresa from "../../models/Empresa";
+import EmpresaService from "../../services/EmpresaService";
 
-const Intervalos = () => {
+const Empresas = () => {
   const history = useHistory();
-  const [intervalos, setIntervalos] = useState<Intervalo[]>([]);
-  const { GetAll, Delete } = IntervaloService();
+  const [empresas, setEmpresas] = useState<Empresa[]>([]);
+  const { GetAll, Delete } = EmpresaService();
   const [open, setOpen] = useState(false);
-  const [intervaloExcluir, setIntervaloExcluir] = useState<
-    Intervalo | undefined
-  >();
+  const [empresaExcluir, setEmpresaExcluir] = useState<Empresa | undefined>();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -38,9 +36,9 @@ const Intervalos = () => {
 
   useEffect(() => {
     GetAll()
-      .then((response: SuccessResponse<Intervalo[]>) => {
+      .then((response: SuccessResponse<Empresa[]>) => {
         if (response.Dados) {
-          setIntervalos(response.Dados);
+          setEmpresas(response.Dados);
         }
       })
       .catch((error: ErrorResponse) => {
@@ -54,23 +52,31 @@ const Intervalos = () => {
       field: "Id",
     },
     {
-      title: "Descrição",
-      field: "Descricao",
+      title: "Nome Fantasia",
+      field: "NomeFantasia",
+    },
+    {
+      title: "Razão Social",
+      field: "RazaoSocial",
+    },
+    {
+      title: "CNPJ",
+      field: "Cnpj",
     },
   ];
 
-  return intervalos && intervalos.length > 0 ? (
+  return empresas && empresas.length > 0 ? (
     <div>
       <ExclusaoDialog
         open={open}
         handleClose={handleClose}
         handleDelete={handleDelete}
-        descricao="Confirma a exclusão do intervalo "
-        nome={intervaloExcluir?.Descricao}
+        descricao="Confirma a exclusão do empresa "
+        nome={empresaExcluir?.NomeFantasia}
       />
       <MaterialTable
-        title="Intervalos"
-        data={intervalos}
+        title="Empresas"
+        data={empresas}
         columns={columns}
         localization={localization}
         options={{
@@ -85,16 +91,16 @@ const Intervalos = () => {
             icon: "edit",
             tooltip: "Editar",
             onClick: (event, rowData) => {
-              const intervalo = rowData as Intervalo;
-              history.push(`/app/intervalos/editar/${intervalo.Id}`, intervalo);
+              const empresa = rowData as Empresa;
+              history.push(`/app/empresas/editar/${empresa.Id}`, empresa);
             },
           },
           (rowData) => ({
             icon: "delete",
             tooltip: "Excluir",
             onClick: (event, rowData) => {
-              let intervalo = rowData as Intervalo;
-              setIntervaloExcluir(intervalo);
+              let empresa = rowData as Empresa;
+              setEmpresaExcluir(empresa);
               handleClickOpen();
             },
             disabled: !rowData.Ativo,
@@ -104,10 +110,10 @@ const Intervalos = () => {
     </div>
   ) : (
     <div>
-      <h2>Carregando intervalos...</h2>
+      <h2>Carregando empresas...</h2>
       <Loader loading={true} />
     </div>
   );
 };
 
-export default Intervalos;
+export default Empresas;

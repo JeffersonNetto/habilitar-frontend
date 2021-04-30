@@ -11,6 +11,8 @@ import Metricas from "./pages/Metrica/Metricas";
 import MetricaForm from "./pages/Metrica/MetricaForm";
 import IntervaloForm from "./pages/Intervalo/IntervaloForm";
 import Intervalos from "./pages/Intervalo/Intervalos";
+import EmpresaForm from "./pages/Empresa/EmpresaForm";
+import Empresas from "./pages/Empresa/Empresas";
 
 export function Rotas() {
   return (
@@ -83,6 +85,18 @@ export function RotasInternas() {
         isPrivate={true}
         path="/app/intervalos/editar/:id"
         component={IntervaloForm}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/empresas"
+        component={Empresas}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/empresas/editar/:id"
+        component={EmpresaForm}
       />
     </Switch>
   );
