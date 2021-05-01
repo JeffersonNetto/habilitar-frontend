@@ -16,7 +16,11 @@ axiosInstance.interceptors.request.use(
       !config.url.endsWith("refresh") ||
       !config.url.endsWith("signup")
     ) {
-      config.headers.Authorization = `Bearer tokenaqui`;
+      // const token = localStorage.getItem("token");
+      // if (token) {
+      //   let t = "Bearer " + token;
+      //   config.headers.Authorization = t;
+      // }
     }
 
     return config;

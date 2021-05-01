@@ -34,10 +34,12 @@ export default function LoginService() {
         }
       );
 
-      localStorage.setItem("token", JSON.stringify(data.Dados?.Token));
-      api.defaults.headers.Authorization = `Bearer ${data.Dados?.Token}`;
-      setAuthenticated(true);
-      setUsuarioLogado(data.Dados);
+      if (data.Dados?.Token) {
+        localStorage.setItem("token", data.Dados.Token);
+        api.defaults.headers.Authorization = `Bearer ${data.Dados.Token}`;
+        setAuthenticated(true);
+        setUsuarioLogado(data.Dados);
+      }
 
       return data;
     } catch (error) {
