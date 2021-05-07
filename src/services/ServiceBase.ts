@@ -1,10 +1,10 @@
-import { SuccessResponse } from "../helpers/Retorno";
+import { CustomResponse } from "./../helpers/Retorno";
 import api from "../interceptor/http-interceptor";
 
 const ServiceBase = <T>(url: string) => {
   const GetAll = async () => {
     try {
-      const { data } = await api.get<SuccessResponse<T[]>>(url);
+      const { data } = await api.get<CustomResponse<T[]>>(url);
       return data;
     } catch (error) {
       throw error;
@@ -13,7 +13,7 @@ const ServiceBase = <T>(url: string) => {
 
   const Get = async (id: number) => {
     try {
-      const { data } = await api.get<SuccessResponse<T>>(`${url}${id}`);
+      const { data } = await api.get<CustomResponse<T>>(`${url}${id}`);
       return data;
     } catch (error) {
       throw error;
@@ -22,7 +22,7 @@ const ServiceBase = <T>(url: string) => {
 
   const Insert = async (body: T) => {
     try {
-      const { data } = await api.post<SuccessResponse<T>>(url, body);
+      const { data } = await api.post<CustomResponse<T>>(url, body);
       return data;
     } catch (error) {
       throw error;
@@ -31,7 +31,7 @@ const ServiceBase = <T>(url: string) => {
 
   const Update = async (id: number, body: T) => {
     try {
-      const { data } = await api.put<SuccessResponse<T>>(`${url}${id}`, body);
+      const { data } = await api.put<CustomResponse<T>>(`${url}${id}`, body);
       return data;
     } catch (error) {
       throw error;
@@ -40,7 +40,7 @@ const ServiceBase = <T>(url: string) => {
 
   const Delete = async (id: number) => {
     try {
-      const { data } = await api.delete<SuccessResponse<T>>(`${url}${id}`);
+      const { data } = await api.delete<CustomResponse<T>>(`${url}${id}`);
       return data;
     } catch (error) {
       throw error;

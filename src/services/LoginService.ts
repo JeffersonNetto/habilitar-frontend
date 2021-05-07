@@ -1,9 +1,11 @@
 import Usuario from "../models/Usuario";
 import api from "../interceptor/http-interceptor";
 import { useState, useEffect } from "react";
-import { SuccessResponse } from "../helpers/Retorno";
+import LoginResponseViewModel from "../view-models/LoginResponseViewModel";
+import LoginViewModel from "../view-models/LoginViewModel";
+import { CustomResponse } from "../helpers/Retorno";
 
-const url = "usuario/login";
+const url = "auth/entrar";
 
 export default function LoginService() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -14,16 +16,16 @@ export default function LoginService() {
     const token = localStorage.getItem("token");
 
     if (token) {
-      api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+      api.defaults.headers.Authorization = `Bearer ${token}`;
       setAuthenticated(true);
     }
 
     setLoading(false);
   }, []);
 
-  async function handleLogin(usuario: Usuario) {
+  async function handleLogin(usuario: LoginViewModel) {
     try {
-      const { data } = await api.post<SuccessResponse<Usuario>>(
+      const { data } = await api.post<CustomResponse<LoginResponseViewModel>>(
         url,
         JSON.stringify(usuario),
         {
@@ -34,11 +36,11 @@ export default function LoginService() {
         }
       );
 
-      if (data.Dados?.Token) {
-        localStorage.setItem("token", data.Dados.Token);
-        api.defaults.headers.Authorization = `Bearer ${data.Dados.Token}`;
+      if (data.Dados.AccessToken) {
+        localStorage.setItem("token", data.Dados.AccessToken);
+        api.defaults.headers.Authorization = `Bearer ${data.Dados.AccessToken}`;
         setAuthenticated(true);
-        setUsuarioLogado(data.Dados);
+        setUsuarioLogado(data.Dados.User);
       }
 
       return data;

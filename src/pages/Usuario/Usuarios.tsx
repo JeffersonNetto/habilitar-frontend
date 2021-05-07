@@ -4,7 +4,7 @@ import UsuarioService from "../../services/UsuarioService";
 import MaterialTable from "material-table";
 import Loader from "../../components/loader/Loader";
 import { useHistory } from "react-router-dom";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
+import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import localization from "../../helpers/material-table-localization";
 
 const Usuarios = () => {
@@ -24,7 +24,7 @@ const Usuarios = () => {
 
   useEffect(() => {
     GetAll()
-      .then((response: SuccessResponse<Usuario[]>) => {
+      .then((response: CustomResponse<Usuario[]>) => {
         setUsuarios(response.Dados);
       })
       .catch((error: ErrorResponse) => {

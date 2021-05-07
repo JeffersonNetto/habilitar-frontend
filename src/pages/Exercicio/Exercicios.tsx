@@ -1,6 +1,6 @@
 import MaterialTable from "material-table";
 import { useEffect, useState } from "react";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
+import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Exercicio from "../../models/Exercicio";
 import ExercicioService from "../../services/ExercicioService";
 import Loader from "../../components/loader/Loader";
@@ -10,7 +10,7 @@ import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
 
 const Exercicios = () => {
   const history = useHistory();
-  const [exercicios, setExercicios] = useState<Exercicio[]>([]);
+  const [exercicios, setExercicios] = useState<Exercicio[] | undefined>();
   const { GetAll, Delete } = ExercicioService();
   const [open, setOpen] = useState(false);
   const [exercicioExcluir, setExercicioExcluir] = useState<
@@ -38,7 +38,7 @@ const Exercicios = () => {
 
   useEffect(() => {
     GetAll()
-      .then((response: SuccessResponse<Exercicio[]>) => {
+      .then((response: CustomResponse<Exercicio[]>) => {
         if (response.Dados) {
           setExercicios(response.Dados);
         }
@@ -67,7 +67,7 @@ const Exercicios = () => {
     },
   ];
 
-  return exercicios && exercicios.length > 0 ? (
+  return exercicios ? (
     <div>
       <ExclusaoDialog
         open={open}
@@ -89,6 +89,12 @@ const Exercicios = () => {
           //actionsColumnIndex: -1,
         }}
         actions={[
+          {
+            icon: "add",
+            tooltip: "Adicionar exercício",
+            isFreeAction: true,
+            onClick: (event) => history.push("/app/exercicios/criar"),
+          },
           {
             icon: "edit",
             tooltip: "Editar",

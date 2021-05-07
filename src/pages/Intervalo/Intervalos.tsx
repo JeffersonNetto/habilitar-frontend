@@ -1,6 +1,6 @@
 import MaterialTable from "material-table";
 import { useEffect, useState } from "react";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
+import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
 import { useHistory } from "react-router";
@@ -10,7 +10,7 @@ import IntervaloService from "../../services/IntervaloService";
 
 const Intervalos = () => {
   const history = useHistory();
-  const [intervalos, setIntervalos] = useState<Intervalo[]>([]);
+  const [intervalos, setIntervalos] = useState<Intervalo[] | undefined>();
   const { GetAll, Delete } = IntervaloService();
   const [open, setOpen] = useState(false);
   const [intervaloExcluir, setIntervaloExcluir] = useState<
@@ -38,10 +38,8 @@ const Intervalos = () => {
 
   useEffect(() => {
     GetAll()
-      .then((response: SuccessResponse<Intervalo[]>) => {
-        if (response.Dados) {
-          setIntervalos(response.Dados);
-        }
+      .then((response: CustomResponse<Intervalo[]>) => {
+        setIntervalos(response.Dados);
       })
       .catch((error: ErrorResponse) => {
         console.log(error);
@@ -59,7 +57,7 @@ const Intervalos = () => {
     },
   ];
 
-  return intervalos && intervalos.length > 0 ? (
+  return intervalos ? (
     <div>
       <ExclusaoDialog
         open={open}
@@ -81,6 +79,12 @@ const Intervalos = () => {
           //actionsColumnIndex: -1,
         }}
         actions={[
+          {
+            icon: "add",
+            tooltip: "Adicionar intervalo",
+            isFreeAction: true,
+            onClick: (event) => history.push("/app/intervalos/criar"),
+          },
           {
             icon: "edit",
             tooltip: "Editar",

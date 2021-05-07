@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
+import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import { useContext, useEffect, useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -20,7 +20,8 @@ import EmpresaService from "../../services/EmpresaService";
 import Empresa from "../../models/Empresa";
 
 const validationSchema = yup.object({
-  descricao: yup.string().required("Informe uma descrição"),
+  razaoSocial: yup.string().required("Informe a Razão Social"),
+  cnpj: yup.string().required("Informe o CNPJ"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -56,11 +57,16 @@ const EmpresaForm = () => {
   });
 
   const { usuarioLogado } = useContext(Context);
+
   const [ip, SetIp] = useState("");
   const { pathname, state } = useLocation();
 
+  console.log(state);
+
   if (pathname.includes("editar")) {
     stateEmpresa = state as Empresa;
+  } else if (pathname.includes("criar")) {
+    stateEmpresa = new Empresa();
   }
 
   useEffect(() => {
@@ -98,10 +104,10 @@ const EmpresaForm = () => {
 
       if (pathname.includes("editar")) {
         Update(empresa.Id, empresa)
-          .then((response: SuccessResponse<Empresa>) => {
+          .then((response: CustomResponse<Empresa>) => {
             setAlertMessage({
               severity: "success",
-              mensagem: response.Mensagem,
+              mensagem: "Empresa atualizada com sucesso",
             });
             setOpen(true);
           })
@@ -121,10 +127,10 @@ const EmpresaForm = () => {
 
       if (pathname.includes("criar")) {
         Insert(empresa)
-          .then((response: SuccessResponse<Empresa>) => {
+          .then((response: CustomResponse<Empresa>) => {
             setAlertMessage({
               severity: "success",
-              mensagem: response.Mensagem,
+              mensagem: "Empresa inserida com sucesso",
             });
             setOpen(true);
           })
@@ -178,16 +184,8 @@ const EmpresaForm = () => {
                 fullWidth
                 id="nomeFantasia"
                 label="Nome Fantasia"
-                autoFocus
                 value={formik.values.nomeFantasia}
                 onChange={formik.handleChange}
-                error={
-                  formik.touched.nomeFantasia &&
-                  Boolean(formik.errors.nomeFantasia)
-                }
-                helperText={
-                  formik.touched.nomeFantasia && formik.errors.nomeFantasia
-                }
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -198,7 +196,6 @@ const EmpresaForm = () => {
                 fullWidth
                 id="razaoSocial"
                 label="Razão Social"
-                autoFocus
                 value={formik.values.razaoSocial}
                 onChange={formik.handleChange}
                 error={
@@ -218,7 +215,6 @@ const EmpresaForm = () => {
                 fullWidth
                 id="cnpj"
                 label="CNPJ"
-                autoFocus
                 value={formik.values.cnpj}
                 onChange={formik.handleChange}
                 error={formik.touched.cnpj && Boolean(formik.errors.cnpj)}

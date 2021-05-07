@@ -59,6 +59,12 @@ export function RotasInternas() {
       <CustomRoute
         exact
         isPrivate={true}
+        path="/app/exercicios/criar"
+        component={ExercicioForm}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
         path="/app/exercicios/editar/:id"
         component={ExercicioForm}
       />
@@ -67,6 +73,12 @@ export function RotasInternas() {
         isPrivate={true}
         path="/app/metricas"
         component={Metricas}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/metricas/criar"
+        component={MetricaForm}
       />
       <CustomRoute
         exact
@@ -83,6 +95,12 @@ export function RotasInternas() {
       <CustomRoute
         exact
         isPrivate={true}
+        path="/app/intervalos/criar"
+        component={IntervaloForm}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
         path="/app/intervalos/editar/:id"
         component={IntervaloForm}
       />
@@ -91,6 +109,12 @@ export function RotasInternas() {
         isPrivate={true}
         path="/app/empresas"
         component={Empresas}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/empresas/criar"
+        component={EmpresaForm}
       />
       <CustomRoute
         exact

@@ -1,3 +1,4 @@
+/*
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -246,5 +247,10 @@ const UsuarioForm = () => {
     </Container>
   );
 };
+
+export default UsuarioForm;
+*/
+
+const UsuarioForm = () => <></>;
 
 export default UsuarioForm;

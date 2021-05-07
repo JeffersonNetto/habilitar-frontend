@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
+import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import { useContext, useEffect, useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -61,6 +61,8 @@ const MetricaForm = () => {
 
   if (pathname.includes("editar")) {
     stateMetrica = state as Metrica;
+  } else if (pathname.includes("criar")) {
+    stateMetrica = new Metrica();
   }
 
   useEffect(() => {
@@ -98,10 +100,10 @@ const MetricaForm = () => {
 
       if (pathname.includes("editar")) {
         Update(metrica.Id, metrica)
-          .then((response: SuccessResponse<Metrica>) => {
+          .then((response: CustomResponse<Metrica>) => {
             setAlertMessage({
               severity: "success",
-              mensagem: response.Mensagem,
+              mensagem: "Métrica atualizada com sucesso",
             });
             setOpen(true);
           })
@@ -121,10 +123,10 @@ const MetricaForm = () => {
 
       if (pathname.includes("criar")) {
         Insert(metrica)
-          .then((response: SuccessResponse<Metrica>) => {
+          .then((response: CustomResponse<Metrica>) => {
             setAlertMessage({
               severity: "success",
-              mensagem: response.Mensagem,
+              mensagem: "Métrica inserida com sucesso",
             });
             setOpen(true);
           })
@@ -178,7 +180,6 @@ const MetricaForm = () => {
                 fullWidth
                 id="descricao"
                 label="Descrição"
-                autoFocus
                 value={formik.values.descricao}
                 onChange={formik.handleChange}
                 error={

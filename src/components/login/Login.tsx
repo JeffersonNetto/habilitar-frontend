@@ -21,10 +21,12 @@ import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
 import { Context } from "../../context/AuthContext";
 import Loader from "../loader/Loader";
 import { useHistory } from "react-router";
+import LoginViewModel from "../../view-models/LoginViewModel";
+import LoginResponseViewModel from "../../view-models/LoginResponseViewModel";
 
 const validationSchema = yup.object({
-  login: yup.string().required("Informe seu login"),
-  senha: yup.string().required("Informe sua senha"),
+  email: yup.string().required("Informe seu e-mail"),
+  password: yup.string().required("Informe sua senha"),
 });
 
 function Copyright() {
@@ -63,32 +65,35 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      login: "",
-      senha: "",
+      email: "",
+      password: "",
     },
     onSubmit: (values) => {
       setLoading(true);
-      const usuario: Usuario = {
-        Login: values.login,
-        Senha: values.senha,
+      const usuario: LoginViewModel = {
+        Email: values.email,
+        Password: values.password,
       };
 
       handleLogin(usuario)
-        .then((response: SuccessResponse<Usuario>) => {
-          setAlertMessage({ severity: "success", mensagem: response.Mensagem });
+        .then((response: LoginResponseViewModel) => {
+          setAlertMessage({
+            severity: "success",
+            mensagem: "Login realizado com sucesso",
+          });
           setOpen(true);
           setTimeout(() => {
             history.push("/");
           }, 1000);
         })
         .catch((error: any) => {
-          let err: ErrorResponse = error?.response?.data;
-          setAlertMessage({
-            severity: "error",
-            mensagem: err
-              ? err.Mensagem
-              : "Sistema temporariamente indisponível",
-          });
+          // let err: ErrorResponse = error?.response?.data;
+          // setAlertMessage({
+          //   severity: "error",
+          //   mensagem: err
+          //     ? err.Mensagem
+          //     : "Sistema temporariamente indisponível",
+          // });
           setOpen(true);
         })
         .finally(() => {
@@ -131,29 +136,29 @@ const Login = () => {
               variant="outlined"
               margin="normal"
               fullWidth
-              id="login"
-              label="Login"
-              name="login"
-              autoComplete="login"
+              id="email"
+              label="E-mail"
+              name="email"
+              autoComplete="email"
               autoFocus
               onChange={formik.handleChange}
-              value={formik.values.login}
-              error={formik.touched.login && Boolean(formik.errors.login)}
-              helperText={formik.touched.login && formik.errors.login}
+              value={formik.values.email}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
             <TextField
               variant="outlined"
               margin="normal"
               fullWidth
-              name="senha"
+              name="password"
               label="Senha"
               type="password"
-              id="senha"
+              id="password"
               autoComplete="current-password"
               onChange={formik.handleChange}
-              value={formik.values.senha}
-              error={formik.touched.senha && Boolean(formik.errors.senha)}
-              helperText={formik.touched.senha && formik.errors.senha}
+              value={formik.values.password}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

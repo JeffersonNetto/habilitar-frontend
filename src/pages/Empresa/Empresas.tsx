@@ -1,6 +1,6 @@
 import MaterialTable from "material-table";
 import { useEffect, useState } from "react";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
+import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
 import { useHistory } from "react-router";
@@ -10,7 +10,7 @@ import EmpresaService from "../../services/EmpresaService";
 
 const Empresas = () => {
   const history = useHistory();
-  const [empresas, setEmpresas] = useState<Empresa[]>([]);
+  const [empresas, setEmpresas] = useState<Empresa[] | undefined>();
   const { GetAll, Delete } = EmpresaService();
   const [open, setOpen] = useState(false);
   const [empresaExcluir, setEmpresaExcluir] = useState<Empresa | undefined>();
@@ -36,7 +36,7 @@ const Empresas = () => {
 
   useEffect(() => {
     GetAll()
-      .then((response: SuccessResponse<Empresa[]>) => {
+      .then((response: CustomResponse<Empresa[]>) => {
         if (response.Dados) {
           setEmpresas(response.Dados);
         }
@@ -65,7 +65,7 @@ const Empresas = () => {
     },
   ];
 
-  return empresas && empresas.length > 0 ? (
+  return empresas ? (
     <div>
       <ExclusaoDialog
         open={open}
@@ -87,6 +87,12 @@ const Empresas = () => {
           //actionsColumnIndex: -1,
         }}
         actions={[
+          {
+            icon: "add",
+            tooltip: "Adicionar empresa",
+            isFreeAction: true,
+            onClick: (event) => history.push("/app/empresas/criar"),
+          },
           {
             icon: "edit",
             tooltip: "Editar",

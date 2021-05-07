@@ -1,6 +1,6 @@
 import MaterialTable from "material-table";
 import { useEffect, useState } from "react";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
+import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
 import { useHistory } from "react-router";
@@ -10,7 +10,7 @@ import MetricaService from "../../services/MetricaService";
 
 const Metricas = () => {
   const history = useHistory();
-  const [metricas, setMetricas] = useState<Metrica[]>([]);
+  const [metricas, setMetricas] = useState<Metrica[] | undefined>();
   const { GetAll, Delete } = MetricaService();
   const [open, setOpen] = useState(false);
   const [metricaExcluir, setMetricaExcluir] = useState<Metrica | undefined>();
@@ -36,7 +36,7 @@ const Metricas = () => {
 
   useEffect(() => {
     GetAll()
-      .then((response: SuccessResponse<Metrica[]>) => {
+      .then((response: CustomResponse<Metrica[]>) => {
         if (response.Dados) {
           setMetricas(response.Dados);
         }
@@ -65,7 +65,7 @@ const Metricas = () => {
     },
   ];
 
-  return metricas && metricas.length > 0 ? (
+  return metricas ? (
     <div>
       <ExclusaoDialog
         open={open}
@@ -87,6 +87,12 @@ const Metricas = () => {
           //actionsColumnIndex: -1,
         }}
         actions={[
+          {
+            icon: "add",
+            tooltip: "Adicionar métrica",
+            isFreeAction: true,
+            onClick: (event) => history.push("/app/metricas/criar"),
+          },
           {
             icon: "edit",
             tooltip: "Editar",

@@ -9,3 +9,7 @@ export class SuccessResponse<T> extends Response {
 export class ErrorResponse extends Response {
   Erros!: string[];
 }
+
+export class CustomResponse<T> {
+  Dados!: T;
+}

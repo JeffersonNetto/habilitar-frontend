@@ -3,7 +3,7 @@ export default class Entity {
   Ip?: string;
   Ativo: boolean = true;
   DataCriacao: Date = new Date();
-  UsuarioCriacaoId?: number;
+  UsuarioCriacaoId?: string;
   DataAtualizacao?: Date;
-  UsuarioAtualizacaoId?: number;
+  UsuarioAtualizacaoId?: string;
 }

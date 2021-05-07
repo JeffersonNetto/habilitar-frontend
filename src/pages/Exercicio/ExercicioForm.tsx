@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
+import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import { useContext, useEffect, useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -62,6 +62,8 @@ const ExercicioForm = () => {
 
   if (pathname.includes("editar")) {
     stateExercicio = state as Exercicio;
+  } else if (pathname.includes("criar")) {
+    stateExercicio = new Exercicio();
   }
 
   useEffect(() => {
@@ -101,10 +103,10 @@ const ExercicioForm = () => {
 
       if (pathname.includes("editar")) {
         Update(exercicio.Id, exercicio)
-          .then((response: SuccessResponse<Exercicio>) => {
+          .then((response: CustomResponse<Exercicio>) => {
             setAlertMessage({
               severity: "success",
-              mensagem: response.Mensagem,
+              mensagem: "Exercício atualizado com sucesso",
             });
             setOpen(true);
           })
@@ -124,10 +126,10 @@ const ExercicioForm = () => {
 
       if (pathname.includes("criar")) {
         Insert(exercicio)
-          .then((response: SuccessResponse<Exercicio>) => {
+          .then((response: CustomResponse<Exercicio>) => {
             setAlertMessage({
               severity: "success",
-              mensagem: response.Mensagem,
+              mensagem: "Exerício inserido com sucesso",
             });
             setOpen(true);
           })
@@ -181,7 +183,6 @@ const ExercicioForm = () => {
                 fullWidth
                 id="nome"
                 label="Nome"
-                autoFocus
                 value={formik.values.nome}
                 onChange={formik.handleChange}
                 error={formik.touched.nome && Boolean(formik.errors.nome)}

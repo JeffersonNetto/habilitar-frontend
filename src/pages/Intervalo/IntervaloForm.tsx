@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
+import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import { useContext, useEffect, useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -61,6 +61,8 @@ const IntervaloForm = () => {
 
   if (pathname.includes("editar")) {
     stateIntervalo = state as Intervalo;
+  } else if (pathname.includes("criar")) {
+    stateIntervalo = new Intervalo();
   }
 
   useEffect(() => {
@@ -94,10 +96,10 @@ const IntervaloForm = () => {
 
       if (pathname.includes("editar")) {
         Update(intervalo.Id, intervalo)
-          .then((response: SuccessResponse<Intervalo>) => {
+          .then((response: CustomResponse<Intervalo>) => {
             setAlertMessage({
               severity: "success",
-              mensagem: response.Mensagem,
+              mensagem: "Intervalo atualizado com sucesso",
             });
             setOpen(true);
           })
@@ -117,10 +119,10 @@ const IntervaloForm = () => {
 
       if (pathname.includes("criar")) {
         Insert(intervalo)
-          .then((response: SuccessResponse<Intervalo>) => {
+          .then((response: CustomResponse<Intervalo>) => {
             setAlertMessage({
               severity: "success",
-              mensagem: response.Mensagem,
+              mensagem: "Intervalo inserido com sucesso",
             });
             setOpen(true);
           })
@@ -174,7 +176,6 @@ const IntervaloForm = () => {
                 fullWidth
                 id="descricao"
                 label="Descrição"
-                autoFocus
                 value={formik.values.descricao}
                 onChange={formik.handleChange}
                 error={
