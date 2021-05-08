@@ -13,6 +13,8 @@ import IntervaloForm from "./pages/Intervalo/IntervaloForm";
 import Intervalos from "./pages/Intervalo/Intervalos";
 import EmpresaForm from "./pages/Empresa/EmpresaForm";
 import Empresas from "./pages/Empresa/Empresas";
+import Unidades from "./pages/Unidade/Unidades";
+import UnidadeForm from "./pages/Unidade/UnidadeForm";
 
 export function Rotas() {
   return (
@@ -121,6 +123,25 @@ export function RotasInternas() {
         isPrivate={true}
         path="/app/empresas/editar/:id"
         component={EmpresaForm}
+      />
+
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/unidades"
+        component={Unidades}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/unidades/criar"
+        component={UnidadeForm}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/unidades/editar/:id"
+        component={UnidadeForm}
       />
     </Switch>
   );
