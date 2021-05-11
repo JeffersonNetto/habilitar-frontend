@@ -1,7 +1,19 @@
 import { CustomResponse } from "./../helpers/Retorno";
 import api from "../interceptor/http-interceptor";
+import ComboBase from "../view-models/ComboBase";
 
 const ServiceBase = <T>(url: string) => {
+  const GetCombo = async () => {
+    try {
+      const { data } = await api.get<CustomResponse<ComboBase<number>[]>>(
+        `${url}combo`
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const GetAll = async () => {
     try {
       const { data } = await api.get<CustomResponse<T[]>>(url);
@@ -47,7 +59,7 @@ const ServiceBase = <T>(url: string) => {
     }
   };
 
-  return { GetAll, Get, Insert, Update, Delete };
+  return { GetAll, Get, Insert, Update, Delete, GetCombo };
 };
 
 export default ServiceBase;

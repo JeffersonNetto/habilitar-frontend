@@ -63,6 +63,10 @@ const Unidades = () => {
       title: "Telefone",
       field: "Telefone",
     },
+    {
+      title: "Empresa",
+      field: "Empresa.NomeFantasia",
+    },
   ];
 
   return unidades ? (

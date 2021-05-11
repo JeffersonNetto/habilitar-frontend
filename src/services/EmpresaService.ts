@@ -4,9 +4,10 @@ import ServiceBase from "./ServiceBase";
 const url = "empresa/";
 
 const EmpresaService = () => {
-  const { GetAll, Insert, Update, Delete } = ServiceBase<Empresa>(url);
+  const { GetAll, Insert, Update, Delete, GetCombo } =
+    ServiceBase<Empresa>(url);
 
-  return { GetAll, Insert, Update, Delete };
+  return { GetAll, Insert, Update, Delete, GetCombo };
 };
 
 export default EmpresaService;

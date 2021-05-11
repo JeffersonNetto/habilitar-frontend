@@ -92,5 +92,22 @@ export const mainListItems = (
         <ListItemText primary="Empresas" />
       </Link>
     </ListItem>
+
+    <ListItem button>
+      <Link
+        to="/app/unidades"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+      </Link>
+      <Link
+        to="/app/unidades"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <ListItemText primary="Unidades" />
+      </Link>
+    </ListItem>
   </div>
 );

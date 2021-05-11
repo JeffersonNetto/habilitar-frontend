@@ -18,9 +18,17 @@ import Alert from "@material-ui/lab/Alert";
 import { useLocation } from "react-router";
 import UnidadeService from "../../services/UnidadeService";
 import Unidade from "../../models/Unidade";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import EmpresaService from "../../services/EmpresaService";
+import ComboBase from "../../view-models/ComboBase";
 
 const validationSchema = yup.object({
-  descricao: yup.string().required("Informe uma descrição"),
+  nome: yup.string().required("Informe um nome"),
+  email: yup
+    .string()
+    .required("Informe um e-mail")
+    .email("Informe um e-mail válido"),
+  telefone: yup.string().required("Informe um telefone"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -55,6 +63,8 @@ const UnidadeForm = () => {
     mensagem: "",
   });
 
+  const [empresas, setEmpresas] = useState<ComboBase<number>[]>([]);
+  const [empresa, setEmpresa] = useState<ComboBase<number> | null>(null);
   const { usuarioLogado } = useContext(Context);
   const [ip, SetIp] = useState("");
   const { pathname, state } = useLocation();
@@ -66,9 +76,28 @@ const UnidadeForm = () => {
   }
 
   useEffect(() => {
+    if (empresas.length > 0) {
+      let temp = empresas.find((e) => e.Value === stateUnidade.EmpresaId);
+
+      if (temp) {
+        setEmpresa(temp);
+      }
+    }
+  }, [empresas]);
+
+  useEffect(() => {
     GetIp().then((response) => {
       SetIp(response);
     });
+
+    EmpresaService()
+      .GetCombo()
+      .then((response: CustomResponse<ComboBase<number>[]>) => {
+        setEmpresas(response.Dados);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -84,6 +113,7 @@ const UnidadeForm = () => {
       nome: stateUnidade.Nome,
       email: stateUnidade.Email,
       telefone: stateUnidade.Telefone,
+      empresaId: stateUnidade.EmpresaId,
     },
     onSubmit: (values) => {
       setLoading(true);
@@ -99,7 +129,7 @@ const UnidadeForm = () => {
         Cnes: "",
         Latitude: "",
         Longitude: "",
-        EmpresaId: 0,
+        EmpresaId: empresa?.Value || 0,
       };
 
       if (pathname.includes("editar")) {
@@ -209,7 +239,8 @@ const UnidadeForm = () => {
                 variant="outlined"
                 fullWidth
                 id="telefone"
-                name="Telefone"
+                name="telefone"
+                label="Telefone"
                 autoComplete="telefone"
                 value={formik.values.telefone}
                 onChange={formik.handleChange}
@@ -218,6 +249,35 @@ const UnidadeForm = () => {
                 }
                 helperText={formik.touched.telefone && formik.errors.telefone}
               />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              {empresa ? (
+                <Autocomplete
+                  fullWidth
+                  id="empresa"
+                  value={empresa}
+                  onChange={(
+                    event: any,
+                    newValue: ComboBase<number> | null
+                  ) => {
+                    setEmpresa(newValue);
+                  }}
+                  options={empresas}
+                  getOptionSelected={(option, value) =>
+                    option?.Value === value?.Value
+                  }
+                  getOptionLabel={(empresa) => empresa.Text}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Empresa" variant="outlined" />
+                  )}
+                />
+              ) : (
+                <div>
+                  <Box display="flex" justifyContent="center">
+                    <Loader loading></Loader>
+                  </Box>
+                </div>
+              )}
             </Grid>
           </Grid>
           <Box textAlign="center">
