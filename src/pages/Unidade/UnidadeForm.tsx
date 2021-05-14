@@ -21,6 +21,7 @@ import Unidade from "../../models/Unidade";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import EmpresaService from "../../services/EmpresaService";
 import ComboBase from "../../view-models/ComboBase";
+import { AutoCompleteEmpresa } from "../../components/autocomplete/autocomplete-empresa";
 
 const validationSchema = yup.object({
   nome: yup.string().required("Informe um nome"),
@@ -116,7 +117,10 @@ const UnidadeForm = () => {
       empresaId: stateUnidade.EmpresaId,
     },
     onSubmit: (values) => {
+      console.log(values);
+
       setLoading(true);
+
       const unidade: Unidade = {
         Nome: values.nome,
         Email: values.email,
@@ -131,6 +135,8 @@ const UnidadeForm = () => {
         Longitude: "",
         EmpresaId: empresa?.Value || 0,
       };
+
+      console.log(unidade);
 
       if (pathname.includes("editar")) {
         Update(unidade.Id, unidade)
@@ -251,7 +257,7 @@ const UnidadeForm = () => {
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              {empresa ? (
+              {empresas.length > 0 ? (
                 <Autocomplete
                   fullWidth
                   id="empresa"
@@ -278,6 +284,12 @@ const UnidadeForm = () => {
                   </Box>
                 </div>
               )}
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <AutoCompleteEmpresa
+                EmpresaId={stateUnidade.EmpresaId}
+                handleEmpresa={setEmpresa}
+              />
             </Grid>
           </Grid>
           <Box textAlign="center">

@@ -1,32 +1,36 @@
-/*
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Box from "@material-ui/core/Box";
 import * as yup from "yup";
-import { useFormik } from "formik";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
-import Loader from "../../components/loader/Loader";
-import { useContext, useEffect, useState } from "react";
-import Usuario from "../../models/Usuario";
-import UsuarioService from "../../services/UsuarioService";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { Formik, Form } from "formik";
 import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import GetIp from "../../services/IpService";
-import { Pessoa } from "../../models/Pessoa";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Loader from "../../components/loader/Loader";
+import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Context } from "../../context/AuthContext";
-import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
-import { useLocation } from "react-router";
+import GetIp from "../../services/IpService";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 const validationSchema = yup.object({
-  login: yup.string().required("Informe seu login"),
-  senha: yup.string().required("Informe sua senha"),
+  nome: yup.string().required("Informe seu nome"),
+  sobrenome: yup.string().required("Informe seu sobrenome"),
+  cpf: yup.string().required("Informe seu CPF"),
+  dataNascimento: yup.string().required("Informe sua data de nascimento"),
+  userName: yup.string().required("Informe um nome de usuário"),
+  phoneNumber: yup.string().required("Informe um número de telefone"),
+  email: yup
+    .string()
+    .required("Informe seu e-mail")
+    .email("Informe um e-mail válido"),
+  password: yup.string().required("Informe sua senha"),
+  confirmPassword: yup.string().required("Confirme sua senha"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  formControl: {
+    minWidth: 150,
   },
   avatar: {
     margin: theme.spacing(1),
@@ -49,29 +56,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let usuario: Usuario;
-const pessoas: Pessoa[] = [];
-
 const UsuarioForm = () => {
   const classes = useStyles();
-  const { Insert } = UsuarioService();
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<any>({
-    severity: "",
-    mensagem: "",
-  });
-
   const { usuarioLogado } = useContext(Context);
-
   const [ip, SetIp] = useState("");
-  const [pessoa, SetPessoa] = useState<Pessoa | null>(null);
-
   const { pathname, state } = useLocation();
-
-  if (pathname.includes("editar")) {
-    usuario = state as Usuario;
-  }
 
   useEffect(() => {
     GetIp().then((response) => {
@@ -79,178 +68,274 @@ const UsuarioForm = () => {
     });
   }, []);
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      login: usuario.Login,
-      senha: "",
-      conselho: usuario.Conselho,
-    },
-    onSubmit: (values) => {
-      setLoading(true);
-      const usuario: Usuario = {
-        Login: values.login,
-        Senha: values.senha,
-        Ativo: true,
-        DataCriacao: new Date(),
-        Ip: ip,
-        Profissional: false,
-        Fisioterapeuta: false,
-        UsuarioCriacaoId: usuarioLogado?.Id,
-        Id: 0,
-        PessoaId: pessoa?.Id,
-        Conselho: values.conselho,
-      };
-
-      console.log("form", usuario);
-
-      Insert(usuario)
-        .then((response: SuccessResponse<Usuario>) => {
-          setAlertMessage({ severity: "success", mensagem: response.Mensagem });
-          setOpen(true);
-        })
-        .catch((error: any) => {
-          let err: ErrorResponse = error?.response?.data;
-          setAlertMessage({
-            severity: "error",
-            mensagem: err
-              ? err.Mensagem
-              : "Sistema temporariamente indisponível",
-          });
-          setOpen(true);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    },
-    validationSchema: validationSchema,
-  });
-
   return (
-    <Container component="main" maxWidth="xl">
-      <CssBaseline />
-
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+    <div>
+      <Formik
+        initialValues={{
+          nome: "",
+          sobrenome: "",
+          dataNascimento: undefined,
+          sexo: "",
+          cpf: "",
+          integracaoId: "",
+          userName: "",
+          phoneNumber: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        }}
+        validationSchema={validationSchema}
+        onSubmit={(values, actions) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            actions.setSubmitting(false);
+          }, 500);
+        }}
       >
-        <Alert
-          onClose={handleClose}
-          severity={alertMessage.severity}
-          variant="filled"
-        >
-          <div style={{ fontSize: "1rem" }}>{alertMessage.mensagem}</div>
-        </Alert>
-      </Snackbar>
-
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Usuário
-        </Typography>
-        <form className={classes.form} onSubmit={formik.handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="login"
-                name="login"
-                variant="outlined"
-                fullWidth
-                id="login"
-                label="Login"
-                autoFocus
-                value={formik.values.login}
-                onChange={formik.handleChange}
-                error={formik.touched.login && Boolean(formik.errors.login)}
-                helperText={formik.touched.login && formik.errors.login}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                type="password"
-                variant="outlined"
-                fullWidth
-                id="senha"
-                label="Senha"
-                name="senha"
-                autoComplete="senha"
-                value={formik.values.senha}
-                onChange={formik.handleChange}
-                error={formik.touched.senha && Boolean(formik.errors.senha)}
-                helperText={formik.touched.senha && formik.errors.senha}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                id="conselho"
-                label="Conselho"
-                name="conselho"
-                autoComplete="conselho"
-                value={formik.values.conselho}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Autocomplete
-                fullWidth
-                id="pessoa"
-                value={pessoa}
-                onChange={(event: any, newValue: Pessoa | null) => {
-                  SetPessoa(newValue);
-                }}
-                options={pessoas}
-                getOptionSelected={(option, value) => option?.Id === value?.Id}
-                getOptionLabel={(pessoa) => pessoa.Nome}
-                renderInput={(params) => (
-                  <TextField {...params} label="Pessoa" variant="outlined" />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlLabel
-                control={<Checkbox value="profissional" color="primary" />}
-                label="Profissional"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlLabel
-                control={<Checkbox value="fisioterapeuta" color="primary" />}
-                label="Fisioterapeuta"
-              />
-            </Grid>
-          </Grid>
-          <Box textAlign="center">
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Salvar
-            </Button>
-          </Box>
-        </form>
-      </div>
-      <Box display="flex" justifyContent="center">
-        <Loader loading={loading}></Loader>
-      </Box>
-    </Container>
+        {(formik) => (
+          <Container component="main" maxWidth="xl">
+            <CssBaseline />
+            <div className={classes.paper}>
+              <Typography component="h1" variant="h5">
+                Usuário
+              </Typography>
+              <Form className={classes.form}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      type="text"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.nome}
+                      name="nome"
+                      placeholder="Nome"
+                      label="Nome"
+                      error={formik.touched.nome && Boolean(formik.errors.nome)}
+                      helperText={formik.touched.nome && formik.errors.nome}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      type="text"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.sobrenome}
+                      name="sobrenome"
+                      placeholder="Sobrenome"
+                      label="Sobrenome"
+                      error={
+                        formik.touched.sobrenome &&
+                        Boolean(formik.errors.sobrenome)
+                      }
+                      helperText={
+                        formik.touched.sobrenome && formik.errors.sobrenome
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      type="text"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.cpf}
+                      name="cpf"
+                      placeholder="CPF"
+                      label="CPF"
+                      error={formik.touched.cpf && Boolean(formik.errors.cpf)}
+                      helperText={formik.touched.cpf && formik.errors.cpf}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      type="date"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.dataNascimento}
+                      name="dataNascimento"
+                      placeholder="Data de nascimento"
+                      label="Data de nascimento"
+                      error={
+                        formik.touched.dataNascimento &&
+                        Boolean(formik.errors.dataNascimento)
+                      }
+                      helperText={
+                        formik.touched.dataNascimento &&
+                        formik.errors.dataNascimento
+                      }
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      type="text"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.userName}
+                      name="userName"
+                      placeholder="Nome de usuário"
+                      label="Nome de usuário"
+                      error={
+                        formik.touched.userName &&
+                        Boolean(formik.errors.userName)
+                      }
+                      helperText={
+                        formik.touched.userName && formik.errors.userName
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      type="text"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.phoneNumber}
+                      name="phoneNumber"
+                      placeholder="Telefone"
+                      label="Telefone"
+                      error={
+                        formik.touched.phoneNumber &&
+                        Boolean(formik.errors.phoneNumber)
+                      }
+                      helperText={
+                        formik.touched.phoneNumber && formik.errors.phoneNumber
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      fullWidth
+                      type="text"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.email}
+                      name="email"
+                      placeholder="E-mail"
+                      label="E-mail"
+                      error={
+                        formik.touched.email && Boolean(formik.errors.email)
+                      }
+                      helperText={formik.touched.email && formik.errors.email}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      type="password"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.password}
+                      name="password"
+                      placeholder="Senha"
+                      label="Senha"
+                      error={
+                        formik.touched.password &&
+                        Boolean(formik.errors.password)
+                      }
+                      helperText={
+                        formik.touched.password && formik.errors.password
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      type="password"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.confirmPassword}
+                      name="confirmPassword"
+                      placeholder="Confirmar senha"
+                      label="Confirmar senha"
+                      error={
+                        formik.touched.confirmPassword &&
+                        Boolean(formik.errors.confirmPassword)
+                      }
+                      helperText={
+                        formik.touched.confirmPassword &&
+                        formik.errors.confirmPassword
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      type="text"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.integracaoId}
+                      name="integracaoId"
+                      placeholder="Integração Id"
+                      label="Integração Id"
+                      error={
+                        formik.touched.integracaoId &&
+                        Boolean(formik.errors.integracaoId)
+                      }
+                      helperText={
+                        formik.touched.integracaoId &&
+                        formik.errors.integracaoId
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <FormControl variant="outlined" fullWidth>
+                      <InputLabel id="select-label">Sexo</InputLabel>
+                      <Select
+                        labelId="select-label"
+                        id="select"
+                        value={formik.values.sexo}
+                        name="sexo"
+                        onChange={formik.handleChange}
+                        label="Sexo"
+                        autoWidth
+                      >
+                        <MenuItem value="">
+                          <em>Prefiro não informar</em>
+                        </MenuItem>
+                        <MenuItem value="F">Feminino</MenuItem>
+                        <MenuItem value="M">Masculino</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Box textAlign="center">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={formik.isSubmitting}
+                    className={classes.submit}
+                  >
+                    Salvar
+                  </Button>
+                </Box>
+                <Box display="flex" justifyContent="center">
+                  <Loader loading={formik.isSubmitting}></Loader>
+                </Box>
+              </Form>
+            </div>
+          </Container>
+        )}
+      </Formik>
+    </div>
   );
 };
-
-export default UsuarioForm;
-*/
-
-const UsuarioForm = () => <></>;
 
 export default UsuarioForm;
