@@ -37,6 +37,7 @@ export default function LoginService() {
       );
 
       if (data.Dados.AccessToken) {
+        localStorage.setItem("hbusr", data.Dados.User.Id);
         localStorage.setItem("token", data.Dados.AccessToken);
         api.defaults.headers.Authorization = `Bearer ${data.Dados.AccessToken}`;
         setAuthenticated(true);

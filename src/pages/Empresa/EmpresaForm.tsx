@@ -61,8 +61,6 @@ const EmpresaForm = () => {
   const [ip, SetIp] = useState("");
   const { pathname, state } = useLocation();
 
-  console.log(state);
-
   if (pathname.includes("editar")) {
     stateEmpresa = state as Empresa;
   } else if (pathname.includes("criar")) {
