@@ -13,7 +13,7 @@ const validationSchema = yup.object({
     Nome: yup.string().required("Informe seu nome"),
     Sobrenome: yup.string().required("Informe seu sobrenome"),
     Cpf: yup.string().required("Informe seu CPF"),
-    DataNascimento: yup.string().required("Informe sua data de nascimento"),
+    DataNascimento: yup.date().required("Informe sua data de nascimento"),
   }),
 });
 

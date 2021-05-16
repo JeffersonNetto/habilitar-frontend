@@ -73,7 +73,6 @@ const UnidadeForm = () => {
   if (pathname.includes("editar")) {
     stateUnidade = state as Unidade;
   } else if (pathname.includes("criar")) {
-    stateUnidade = new Unidade();
   }
 
   useEffect(() => {

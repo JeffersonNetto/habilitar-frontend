@@ -1,9 +1,9 @@
-export default class Entity {
-  Id: number = 0;
-  Ip?: string;
-  Ativo: boolean = true;
-  DataCriacao: Date = new Date();
-  UsuarioCriacaoId?: string;
+export default interface Entity {
+  Id: number;
+  Ip: string;
+  Ativo: boolean;
+  DataCriacao: Date;
+  UsuarioCriacaoId: string;
   DataAtualizacao?: Date;
   UsuarioAtualizacaoId?: string;
 }

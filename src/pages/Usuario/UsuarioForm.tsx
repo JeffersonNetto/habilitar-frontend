@@ -21,6 +21,10 @@ import validationSchema from "./validationSchema";
 import initialValues from "./initialValues";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
+import Pessoa from "../../models/Pessoa";
+import { format } from "date-fns";
+
+let statePessoa: Pessoa;
 
 const UsuarioForm = () => {
   const classes = useStyles();
@@ -40,6 +44,24 @@ const UsuarioForm = () => {
     });
   }, []);
 
+  if (pathname.includes("editar")) {
+    statePessoa = state as Pessoa;
+
+    initialValues.Email = statePessoa.User.Email;
+    initialValues.UserName = statePessoa.User.UserName;
+    initialValues.PhoneNumber = statePessoa.User.PhoneNumber;
+    initialValues.Pessoa.Nome = statePessoa.Nome;
+    initialValues.Pessoa.Sobrenome = statePessoa.Sobrenome;
+    initialValues.Pessoa.DataNascimento = format(
+      new Date(statePessoa.DataNascimento),
+      "yyyy-MM-dd"
+    );
+    initialValues.Pessoa.Sexo = statePessoa.Sexo || "NI";
+    initialValues.Pessoa.IntegracaoId = statePessoa.IntegracaoId || "";
+    initialValues.Pessoa.Cpf = statePessoa.Cpf;
+  } else if (pathname.includes("criar")) {
+  }
+
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
       return;
@@ -54,7 +76,9 @@ const UsuarioForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          actions.setSubmitting(true);
+          console.log(values);
+
+          // actions.setSubmitting(true);
 
           AuthService.Registrar(values)
             .then((response) => {

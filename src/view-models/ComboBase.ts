@@ -1,4 +1,4 @@
-export default class ComboBase<T> {
-  Value!: T;
-  Text!: string;
+export default interface ComboBase<T> {
+  Value: T;
+  Text: string;
 }

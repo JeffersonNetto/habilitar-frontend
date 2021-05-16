@@ -1,7 +1,7 @@
 import Entity from "./Entity";
-export default class Exercicio extends Entity {
-  Nome!: string;
-  NomePopular: string | undefined;
-  Descricao!: string;
-  Url!: string;
+export default interface Exercicio extends Entity {
+  Nome: string;
+  NomePopular?: string;
+  Descricao?: string;
+  Url?: string;
 }

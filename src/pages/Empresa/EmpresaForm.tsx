@@ -64,7 +64,6 @@ const EmpresaForm = () => {
   if (pathname.includes("editar")) {
     stateEmpresa = state as Empresa;
   } else if (pathname.includes("criar")) {
-    stateEmpresa = new Empresa();
   }
 
   useEffect(() => {

@@ -63,7 +63,6 @@ const ExercicioForm = () => {
   if (pathname.includes("editar")) {
     stateExercicio = state as Exercicio;
   } else if (pathname.includes("criar")) {
-    stateExercicio = new Exercicio();
   }
 
   useEffect(() => {

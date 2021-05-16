@@ -8,7 +8,7 @@ const initialValues: RegisterUserViewModel = {
   UserName: "",
   Pessoa: {
     Cpf: "",
-    DataNascimento: undefined,
+    DataNascimento: "",
     Nome: "",
     Sobrenome: "",
     Sexo: "NI",

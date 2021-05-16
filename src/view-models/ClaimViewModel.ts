@@ -1,4 +1,4 @@
-export default class ClaimViewModel {
-  Value!: string;
-  Type!: string;
+export default interface ClaimViewModel {
+  Value: string;
+  Type: string;
 }

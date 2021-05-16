@@ -1,4 +1,4 @@
 export default interface ViewModelBaseForInsert {
-  Ip: string;
-  UsuarioCriacaoId: string;
+  Ip?: string;
+  UsuarioCriacaoId?: string;
 }

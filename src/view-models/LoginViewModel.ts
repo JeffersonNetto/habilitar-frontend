@@ -1,4 +1,4 @@
-export default class LoginViewModel {
-  Email!: string;
-  Password!: string;
+export default interface LoginViewModel {
+  Email: string;
+  Password: string;
 }

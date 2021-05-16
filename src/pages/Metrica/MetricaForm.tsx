@@ -62,7 +62,6 @@ const MetricaForm = () => {
   if (pathname.includes("editar")) {
     stateMetrica = state as Metrica;
   } else if (pathname.includes("criar")) {
-    stateMetrica = new Metrica();
   }
 
   useEffect(() => {

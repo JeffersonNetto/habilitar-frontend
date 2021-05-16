@@ -1,11 +1,12 @@
 import Entity from "./Entity";
-export class Pessoa extends Entity {
-  Nome!: string;
-  Sobrenome!: string;
-  DataNascimento!: Date;
-  Sexo!: string;
-  Cpf!: string;
-  Telefone!: string;
-  IntegracaoId: string | undefined;
-  Email!: string;
+import User from "./User";
+
+export default interface Pessoa extends Entity {
+  Nome: string;
+  Sobrenome: string;
+  DataNascimento: string;
+  Sexo: string;
+  Cpf: string;
+  IntegracaoId?: string;
+  User: User;
 }

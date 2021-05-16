@@ -62,7 +62,6 @@ const IntervaloForm = () => {
   if (pathname.includes("editar")) {
     stateIntervalo = state as Intervalo;
   } else if (pathname.includes("criar")) {
-    stateIntervalo = new Intervalo();
   }
 
   useEffect(() => {

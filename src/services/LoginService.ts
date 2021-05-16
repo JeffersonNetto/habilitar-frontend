@@ -1,4 +1,4 @@
-import Usuario from "../models/Usuario";
+import Usuario from "../models/User";
 import api from "../interceptor/http-interceptor";
 import { useState, useEffect } from "react";
 import LoginResponseViewModel from "../view-models/LoginResponseViewModel";

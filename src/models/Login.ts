@@ -1,4 +1,4 @@
-export default class Login {
-  Login: string | undefined;
-  Senha: string | undefined;
+export default interface Login {
+  Login: string;
+  Senha: string;
 }
