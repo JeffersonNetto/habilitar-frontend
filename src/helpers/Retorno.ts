@@ -6,7 +6,7 @@ export class SuccessResponse<T> extends Response {
   Dados!: T;
 }
 
-export class ErrorResponse extends Response {
+export class ErrorResponse {
   Erros!: string[];
 }
 

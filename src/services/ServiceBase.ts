@@ -41,7 +41,7 @@ const ServiceBase = <T>(url: string) => {
     }
   };
 
-  const Update = async (id: number, body: T) => {
+  const Update = async (body: T, id?: number) => {
     try {
       const { data } = await api.put<CustomResponse<T>>(`${url}${id}`, body);
       return data;
