@@ -94,7 +94,7 @@ const IntervaloForm = () => {
       };
 
       if (pathname.includes("editar")) {
-        Update(intervalo.Id, intervalo)
+        Update(intervalo, intervalo.Id)
           .then((response: CustomResponse<Intervalo>) => {
             setAlertMessage({
               severity: "success",
@@ -106,7 +106,7 @@ const IntervaloForm = () => {
             setAlertMessage({
               severity: "error",
               mensagem: error
-                ? error.Mensagem
+                ? error.Erros.map((err) => <p>{err}</p>)
                 : "Sistema temporariamente indisponível",
             });
             setOpen(true);
@@ -129,7 +129,7 @@ const IntervaloForm = () => {
             setAlertMessage({
               severity: "error",
               mensagem: error
-                ? error.Mensagem
+                ? error.Erros.map((err) => <p>{err}</p>)
                 : "Sistema temporariamente indisponível",
             });
             setOpen(true);

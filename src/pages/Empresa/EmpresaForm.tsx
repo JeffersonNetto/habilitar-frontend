@@ -100,7 +100,7 @@ const EmpresaForm = () => {
       };
 
       if (pathname.includes("editar")) {
-        Update(empresa.Id, empresa)
+        Update(empresa, empresa.Id)
           .then((response: CustomResponse<Empresa>) => {
             setAlertMessage({
               severity: "success",
@@ -112,7 +112,7 @@ const EmpresaForm = () => {
             setAlertMessage({
               severity: "error",
               mensagem: error
-                ? error.Mensagem
+                ? error.Erros.map((err) => <p>{err}</p>)
                 : "Sistema temporariamente indisponível",
             });
             setOpen(true);
@@ -135,7 +135,7 @@ const EmpresaForm = () => {
             setAlertMessage({
               severity: "error",
               mensagem: error
-                ? error.Mensagem
+                ? error.Erros.map((err) => <p>{err}</p>)
                 : "Sistema temporariamente indisponível",
             });
             setOpen(true);

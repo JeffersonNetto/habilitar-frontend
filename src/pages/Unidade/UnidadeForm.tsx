@@ -138,7 +138,7 @@ const UnidadeForm = () => {
       console.log(unidade);
 
       if (pathname.includes("editar")) {
-        Update(unidade.Id, unidade)
+        Update(unidade, unidade.Id)
           .then((response: CustomResponse<Unidade>) => {
             setAlertMessage({
               severity: "success",
@@ -150,7 +150,7 @@ const UnidadeForm = () => {
             setAlertMessage({
               severity: "error",
               mensagem: error
-                ? error.Mensagem
+                ? error.Erros.map((err) => <p>{err}</p>)
                 : "Sistema temporariamente indisponível",
             });
             setOpen(true);
@@ -173,7 +173,7 @@ const UnidadeForm = () => {
             setAlertMessage({
               severity: "error",
               mensagem: error
-                ? error.Mensagem
+                ? error.Erros.map((err) => <p>{err}</p>)
                 : "Sistema temporariamente indisponível",
             });
             setOpen(true);

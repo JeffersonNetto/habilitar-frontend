@@ -101,7 +101,7 @@ const ExercicioForm = () => {
       };
 
       if (pathname.includes("editar")) {
-        Update(exercicio.Id, exercicio)
+        Update(exercicio, exercicio.Id)
           .then((response: CustomResponse<Exercicio>) => {
             setAlertMessage({
               severity: "success",
@@ -113,7 +113,7 @@ const ExercicioForm = () => {
             setAlertMessage({
               severity: "error",
               mensagem: error
-                ? error.Mensagem
+                ? error.Erros.map((err) => <p>{err}</p>)
                 : "Sistema temporariamente indisponível",
             });
             setOpen(true);
@@ -136,7 +136,7 @@ const ExercicioForm = () => {
             setAlertMessage({
               severity: "error",
               mensagem: error
-                ? error.Mensagem
+                ? error.Erros.map((err) => <p>{err}</p>)
                 : "Sistema temporariamente indisponível",
             });
             setOpen(true);
