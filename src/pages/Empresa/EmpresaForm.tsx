@@ -1,5 +1,4 @@
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import { Formik, Form } from "formik";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -19,6 +18,7 @@ import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import Empresa from "../../models/Empresa";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
+import CustomTextField from "../../components/textfield/CustomTextField";
 
 let stateEmpresa: Empresa;
 
@@ -124,60 +124,16 @@ const EmpresaForm = () => {
               <Form className={classes.form}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.NomeFantasia}
+                    <CustomTextField
                       name="NomeFantasia"
-                      placeholder="Nome Fantasia"
                       label="Nome Fantasia"
-                      error={
-                        formik.touched.NomeFantasia &&
-                        Boolean(formik.errors.NomeFantasia)
-                      }
-                      helperText={
-                        formik.touched.NomeFantasia &&
-                        formik.errors.NomeFantasia
-                      }
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.RazaoSocial}
-                      name="RazaoSocial"
-                      placeholder="Razão Social"
-                      label="Razão Social"
-                      error={
-                        formik.touched.RazaoSocial &&
-                        Boolean(formik.errors.RazaoSocial)
-                      }
-                      helperText={
-                        formik.touched.RazaoSocial && formik.errors.RazaoSocial
-                      }
-                    />
+                    <CustomTextField name="RazaoSocial" label="Razão Social" />
                   </Grid>
                   <Grid item xs={12} sm={12}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Cnpj}
-                      name="Cnpj"
-                      placeholder="CNPJ"
-                      label="CNPJ"
-                      error={formik.touched.Cnpj && Boolean(formik.errors.Cnpj)}
-                      helperText={formik.touched.Cnpj && formik.errors.Cnpj}
-                    />
+                    <CustomTextField name="Cnpj" label="CNPJ" />
                   </Grid>
                 </Grid>
                 <Box textAlign="center">
