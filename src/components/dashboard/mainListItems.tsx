@@ -109,5 +109,22 @@ export const mainListItems = (
         <ListItemText primary="Unidades" />
       </Link>
     </ListItem>
+
+    <ListItem button>
+      <Link
+        to="/app/grupos"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+      </Link>
+      <Link
+        to="/app/grupos"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <ListItemText primary="Grupos" />
+      </Link>
+    </ListItem>
   </div>
 );

@@ -15,6 +15,8 @@ import EmpresaForm from "./pages/Empresa/EmpresaForm";
 import Empresas from "./pages/Empresa/Empresas";
 import Unidades from "./pages/Unidade/Unidades";
 import UnidadeForm from "./pages/Unidade/UnidadeForm";
+import GrupoForm from "./pages/Grupo/GrupoForm";
+import Grupos from "./pages/Grupo/Grupos";
 
 export function Rotas() {
   return (
@@ -142,6 +144,25 @@ export function RotasInternas() {
         isPrivate={true}
         path="/app/unidades/editar/:id"
         component={UnidadeForm}
+      />
+
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/grupos"
+        component={Grupos}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/grupos/criar"
+        component={GrupoForm}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/grupos/editar/:id"
+        component={GrupoForm}
       />
     </Switch>
   );
