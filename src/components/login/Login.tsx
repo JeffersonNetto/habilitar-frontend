@@ -12,12 +12,10 @@ import Alert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import useStyles from "./useStyles";
-import { useState, useContext } from "react";
-import Usuario from "../../models/Login";
+import { useState, useContext, useEffect } from "react";
 import { Snackbar } from "@material-ui/core";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { SuccessResponse, ErrorResponse } from "../../helpers/Retorno";
 import { Context } from "../../context/AuthContext";
 import Loader from "../loader/Loader";
 import { useHistory } from "react-router";
@@ -43,6 +41,10 @@ function Copyright() {
 }
 
 const Login = () => {
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   const { handleLogin } = useContext(Context);
   const history = useHistory();
 

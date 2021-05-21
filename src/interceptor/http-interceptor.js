@@ -31,4 +31,17 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+axiosInstance.interceptors.response.use(
+  function (successRes) {
+    return successRes;
+  },
+  async function (error) {
+    if (error.response?.status === 401) {
+      window.location.href = `${process.env.REACT_APP_BASE_FRONTEND_URL}login`;
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default axiosInstance;

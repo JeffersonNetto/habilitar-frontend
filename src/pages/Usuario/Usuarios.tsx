@@ -57,6 +57,12 @@ const Usuarios = () => {
       }}
       actions={[
         {
+          icon: "add",
+          tooltip: "Adicionar usuário",
+          isFreeAction: true,
+          onClick: (event) => history.push("/app/usuarios/criar"),
+        },
+        {
           icon: "edit",
           tooltip: "Editar",
           onClick: (event, rowData) => {

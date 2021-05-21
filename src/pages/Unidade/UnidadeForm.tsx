@@ -9,7 +9,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { Snackbar, TextField } from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { useLocation } from "react-router";
 import UnidadeService from "../../services/UnidadeService";
@@ -20,7 +20,6 @@ import validationSchema from "./validationSchema";
 import useStyles from "./useStyles";
 import CustomTextField from "../../components/textfield/CustomTextField";
 import Empresa from "../../models/Empresa";
-import { Autocomplete } from "@material-ui/lab";
 import EmpresaAutocomplete from "../../components/autocomplete/EmpresaAutocomplete";
 
 let stateUnidade: Unidade;
@@ -49,7 +48,17 @@ const UnidadeForm = () => {
 
   if (pathname.includes("editar")) {
     stateUnidade = state as Unidade;
+    initialValues.Nome = stateUnidade.Nome;
+    initialValues.Telefone = stateUnidade.Telefone;
+    initialValues.Email = stateUnidade.Email;
+    initialValues.EmpresaId = stateUnidade.EmpresaId;
+    initialValues.Empresa = stateUnidade.Empresa;
   } else if (pathname.includes("criar")) {
+    initialValues.Nome = "";
+    initialValues.Telefone = "";
+    initialValues.Email = "";
+    initialValues.EmpresaId = 0;
+    initialValues.Empresa = undefined;
   }
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -68,6 +77,8 @@ const UnidadeForm = () => {
         onSubmit={(values, actions) => {
           console.log(values);
 
+          values.Empresa = undefined;
+
           const Func = pathname.includes("editar") ? Update : Insert;
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
@@ -76,8 +87,8 @@ const UnidadeForm = () => {
               setAlertMessage({
                 severity: "success",
                 mensagem: pathname.includes("editar")
-                  ? "Métrica alterada com sucesso"
-                  : "Métrica inserida com sucesso",
+                  ? "Unidade alterada com sucesso"
+                  : "Unidade inserida com sucesso",
               });
               setOpen(true);
             })
@@ -85,7 +96,7 @@ const UnidadeForm = () => {
               console.log(error.Erros);
               setAlertMessage({
                 severity: "error",
-                mensagem: error
+                mensagem: error.Erros
                   ? error.Erros.map((err) => <p>{err}</p>)
                   : "Sistema temporariamente indisponível",
               });
