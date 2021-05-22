@@ -127,12 +127,7 @@ const Login = () => {
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
+          <img src="/LOGO_TARJA_A_AZUL.png" height="128" alt="logo" />
           <form className={classes.form} onSubmit={formik.handleSubmit}>
             <TextField
               variant="outlined"

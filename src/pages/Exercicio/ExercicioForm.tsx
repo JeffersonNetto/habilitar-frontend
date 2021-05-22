@@ -19,6 +19,8 @@ import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import Exercicio from "../../models/Exercicio";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
+import GrupoAutocomplete from "../../components/autocomplete/GrupoAutocomplete";
+import Grupo from "../../models/Grupo";
 
 let stateExercicio: Exercicio;
 
@@ -43,10 +45,23 @@ const ExercicioForm = () => {
 
   if (pathname.includes("editar")) {
     stateExercicio = state as Exercicio;
+
     initialValues.Id = stateExercicio.Id;
     initialValues.Descricao = stateExercicio.Descricao;
     initialValues.Nome = stateExercicio.Nome;
     initialValues.NomePopular = stateExercicio.NomePopular;
+    initialValues.ExercicioGrupo = stateExercicio.ExercicioGrupo;
+
+    initialValues.Grupo = [];
+
+    stateExercicio.ExercicioGrupo?.forEach((eg) => {
+      if (eg.Grupo && !initialValues.Grupo?.find((g) => g.Id === eg.GrupoId)) {
+        initialValues.Grupo?.push(eg.Grupo);
+      }
+    });
+
+    console.log("stateExercicio", stateExercicio);
+    console.log("initialValues", initialValues);
   } else if (pathname.includes("criar")) {
     initialValues.Id = 0;
     initialValues.Descricao = "";
@@ -68,7 +83,37 @@ const ExercicioForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          console.log(values);
+          values.Grupo?.forEach((g) => {
+            if (!values.ExercicioGrupo?.find((eg) => eg.GrupoId === g.Id)) {
+              values.ExercicioGrupo?.push({
+                Ativo: true,
+                ExercicioId: 0,
+                GrupoId: g.Id,
+                Id: 0,
+                Ip: values.Ip,
+              });
+            }
+          });
+
+          const gruposRemover: Array<number> = [];
+
+          if (
+            values.ExercicioGrupo &&
+            values.Grupo &&
+            values.ExercicioGrupo.length > values.Grupo.length
+          ) {
+            values.ExercicioGrupo.forEach((eg) => {
+              if (!values.Grupo?.find((g) => g.Id === eg.GrupoId)) {
+                gruposRemover.push(eg.GrupoId);
+              }
+            });
+          }
+
+          gruposRemover.forEach((grupoId) => {
+            values.ExercicioGrupo = values.ExercicioGrupo?.filter(
+              (eg) => eg.GrupoId !== grupoId
+            );
+          });
 
           const Func = pathname.includes("editar") ? Update : Insert;
 
@@ -87,7 +132,7 @@ const ExercicioForm = () => {
               console.log(error.Erros);
               setAlertMessage({
                 severity: "error",
-                mensagem: error
+                mensagem: error.Erros
                   ? error.Erros.map((err) => <p>{err}</p>)
                   : "Sistema temporariamente indisponível",
               });
@@ -177,6 +222,9 @@ const ExercicioForm = () => {
                         formik.touched.NomePopular && formik.errors.NomePopular
                       }
                     />
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
+                    <GrupoAutocomplete formik={formik} />
                   </Grid>
                 </Grid>
                 <Box textAlign="center">

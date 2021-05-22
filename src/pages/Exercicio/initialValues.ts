@@ -6,6 +6,8 @@ const initialValues: Exercicio = {
   Ativo: true,
   Id: 0,
   Ip: "",
+  ExercicioGrupo: [],
+  Grupo: [],
 };
 
 export default initialValues;

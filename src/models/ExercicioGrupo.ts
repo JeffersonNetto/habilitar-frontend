@@ -5,6 +5,6 @@ import Grupo from "./Grupo";
 export default interface ExercicioGrupo extends Entity {
   ExercicioId: number;
   GrupoId: number;
-  Exercicio: Exercicio;
-  Grupo: Grupo;
+  Exercicio?: Exercicio;
+  Grupo?: Grupo;
 }
