@@ -23,6 +23,7 @@ import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import Pessoa from "../../models/Pessoa";
 import { format } from "date-fns";
+import CustomTextField from "../../components/textfield/CustomTextField";
 
 let statePessoa: Pessoa;
 
@@ -130,66 +131,16 @@ const UsuarioForm = () => {
               <Form className={classes.form}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Pessoa.Nome}
-                      name="Pessoa.Nome"
-                      placeholder="Nome"
-                      label="Nome"
-                      error={
-                        formik.touched.Pessoa?.Nome &&
-                        Boolean(formik.errors.Pessoa?.Nome)
-                      }
-                      helperText={
-                        formik.touched.Pessoa?.Nome &&
-                        formik.errors.Pessoa?.Nome
-                      }
-                    />
+                    <CustomTextField name="Pessoa.Nome" label="Nome" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Pessoa.Sobrenome}
+                    <CustomTextField
                       name="Pessoa.Sobrenome"
-                      placeholder="Sobrenome"
                       label="Sobrenome"
-                      error={
-                        formik.touched.Pessoa?.Sobrenome &&
-                        Boolean(formik.errors.Pessoa?.Sobrenome)
-                      }
-                      helperText={
-                        formik.touched.Pessoa?.Sobrenome &&
-                        formik.errors.Pessoa?.Sobrenome
-                      }
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Pessoa.Cpf}
-                      name="Pessoa.Cpf"
-                      placeholder="CPF"
-                      label="CPF"
-                      error={
-                        formik.touched.Pessoa?.Cpf &&
-                        Boolean(formik.errors.Pessoa?.Cpf)
-                      }
-                      helperText={
-                        formik.touched.Pessoa?.Cpf && formik.errors.Pessoa?.Cpf
-                      }
-                    />
+                    <CustomTextField name="Pessoa.Cpf" label="CPF" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -216,61 +167,13 @@ const UsuarioForm = () => {
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.UserName}
-                      name="UserName"
-                      placeholder="Nome de usuário"
-                      label="Nome de usuário"
-                      error={
-                        formik.touched.UserName &&
-                        Boolean(formik.errors.UserName)
-                      }
-                      helperText={
-                        formik.touched.UserName && formik.errors.UserName
-                      }
-                    />
+                    <CustomTextField name="UserName" label="Nome de usuário" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.PhoneNumber}
-                      name="PhoneNumber"
-                      placeholder="Telefone"
-                      label="Telefone"
-                      error={
-                        formik.touched.PhoneNumber &&
-                        Boolean(formik.errors.PhoneNumber)
-                      }
-                      helperText={
-                        formik.touched.PhoneNumber && formik.errors.PhoneNumber
-                      }
-                    />
+                    <CustomTextField name="PhoneNumber" label="Telefone" />
                   </Grid>
                   <Grid item xs={12} sm={12}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Email}
-                      name="Email"
-                      placeholder="E-mail"
-                      label="E-mail"
-                      error={
-                        formik.touched.Email && Boolean(formik.errors.Email)
-                      }
-                      helperText={formik.touched.Email && formik.errors.Email}
-                    />
+                    <CustomTextField name="Email" label="E-mail" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -314,24 +217,9 @@ const UsuarioForm = () => {
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Pessoa?.IntegracaoId}
+                    <CustomTextField
                       name="Pessoa.IntegracaoId"
-                      placeholder="Integração Id"
                       label="Integração Id"
-                      error={
-                        formik.touched.Pessoa?.IntegracaoId &&
-                        Boolean(formik.errors.Pessoa?.IntegracaoId)
-                      }
-                      helperText={
-                        formik.touched.Pessoa?.IntegracaoId &&
-                        formik.errors.Pessoa?.IntegracaoId
-                      }
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>

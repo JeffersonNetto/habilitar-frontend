@@ -1,5 +1,4 @@
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import { Formik, Form } from "formik";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -19,6 +18,7 @@ import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import Metrica from "../../models/Metrica";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
+import CustomTextField from "../../components/textfield/CustomTextField";
 
 let stateMetrica: Metrica;
 
@@ -123,62 +123,14 @@ const MetricaForm = () => {
               </Typography>
               <Form className={classes.form}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Descricao}
-                      name="Descricao"
-                      placeholder="Descrição"
-                      label="Descrição"
-                      error={
-                        formik.touched.Descricao &&
-                        Boolean(formik.errors.Descricao)
-                      }
-                      helperText={
-                        formik.touched.Descricao && formik.errors.Descricao
-                      }
-                    />
+                  <Grid item xs={12} sm={12}>
+                    <CustomTextField name="Descricao" label="Descrição" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Sigla}
-                      name="Sigla"
-                      placeholder="Sigla"
-                      label="Sigla"
-                      error={
-                        formik.touched.Sigla && Boolean(formik.errors.Sigla)
-                      }
-                      helperText={formik.touched.Sigla && formik.errors.Sigla}
-                    />
+                    <CustomTextField name="Sigla" label="Sigla" />
                   </Grid>
                   <Grid item xs={12} sm={12}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Observacao}
-                      name="Observacao"
-                      placeholder="Observação"
-                      label="Observação"
-                      error={
-                        formik.touched.Observacao &&
-                        Boolean(formik.errors.Observacao)
-                      }
-                      helperText={
-                        formik.touched.Observacao && formik.errors.Observacao
-                      }
-                    />
+                    <CustomTextField name="Observacao" label="Observação" />
                   </Grid>
                 </Grid>
                 <Box textAlign="center">

@@ -19,7 +19,6 @@ import initialValues from "./initialValues";
 import validationSchema from "./validationSchema";
 import useStyles from "./useStyles";
 import CustomTextField from "../../components/textfield/CustomTextField";
-import Empresa from "../../models/Empresa";
 import EmpresaAutocomplete from "../../components/autocomplete/EmpresaAutocomplete";
 
 let stateUnidade: Unidade;
@@ -32,17 +31,6 @@ const UnidadeForm = () => {
     severity: "",
     mensagem: "",
   });
-
-  const [empresas, setEmpresas] = useState<Empresa[]>([]);
-
-  useEffect(() => {
-    EmpresaService()
-      .GetAll()
-      .then((response) => {
-        setEmpresas(response.Dados);
-      })
-      .catch((error) => console.log(error));
-  }, []);
 
   const { pathname, state } = useLocation();
 
@@ -142,35 +130,6 @@ const UnidadeForm = () => {
                     <CustomTextField name="Telefone" label="Telefone" />
                   </Grid>
                   <Grid item xs={12} sm={12}>
-                    {/* {empresas.length > 0 ? (
-                      <Autocomplete
-                        fullWidth
-                        id="Empresa"
-                        value={formik.values.Empresa}
-                        onChange={(event: any, newValue: Empresa | null) => {
-                          formik.setFieldValue("EmpresaId", newValue?.Id);
-                          formik.setFieldValue("Empresa", newValue);
-                        }}
-                        options={empresas}
-                        getOptionSelected={(option, value) =>
-                          option?.Id === value?.Id
-                        }
-                        getOptionLabel={(empresa) => empresa.RazaoSocial}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Empresa"
-                            variant="outlined"
-                          />
-                        )}
-                      />
-                    ) : (
-                      <div>
-                        <Box display="flex" justifyContent="center">
-                          <Loader loading></Loader>
-                        </Box>
-                      </div>
-                    )} */}
                     <EmpresaAutocomplete formik={formik} />
                   </Grid>
                 </Grid>

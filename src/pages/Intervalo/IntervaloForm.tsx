@@ -1,5 +1,4 @@
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import { Formik, Form } from "formik";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -19,6 +18,7 @@ import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import Intervalo from "../../models/Intervalo";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
+import CustomTextField from "../../components/textfield/CustomTextField";
 
 let stateIntervalo: Intervalo;
 
@@ -120,24 +120,7 @@ const IntervaloForm = () => {
               <Form className={classes.form}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Descricao}
-                      name="Descricao"
-                      placeholder="Descrição"
-                      label="Descrição"
-                      error={
-                        formik.touched.Descricao &&
-                        Boolean(formik.errors.Descricao)
-                      }
-                      helperText={
-                        formik.touched.Descricao && formik.errors.Descricao
-                      }
-                    />
+                    <CustomTextField name="Descricao" label="Descrição" />
                   </Grid>
                 </Grid>
                 <Box textAlign="center">

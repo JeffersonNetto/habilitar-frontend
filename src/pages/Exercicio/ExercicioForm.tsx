@@ -1,5 +1,4 @@
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import { Formik, Form } from "formik";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -20,7 +19,7 @@ import Alert from "@material-ui/lab/Alert";
 import Exercicio from "../../models/Exercicio";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
 import GrupoAutocomplete from "../../components/autocomplete/GrupoAutocomplete";
-import Grupo from "../../models/Grupo";
+import CustomTextField from "../../components/textfield/CustomTextField";
 
 let stateExercicio: Exercicio;
 
@@ -43,6 +42,8 @@ const ExercicioForm = () => {
     });
   }, []);
 
+  initialValues.Grupo = [];
+
   if (pathname.includes("editar")) {
     stateExercicio = state as Exercicio;
 
@@ -51,8 +52,6 @@ const ExercicioForm = () => {
     initialValues.Nome = stateExercicio.Nome;
     initialValues.NomePopular = stateExercicio.NomePopular;
     initialValues.ExercicioGrupo = stateExercicio.ExercicioGrupo;
-
-    initialValues.Grupo = [];
 
     stateExercicio.ExercicioGrupo?.forEach((eg) => {
       if (eg.Grupo && !initialValues.Grupo?.find((g) => g.Id === eg.GrupoId)) {
@@ -83,36 +82,13 @@ const ExercicioForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
+          values.ExercicioGrupo = [];
+
           values.Grupo?.forEach((g) => {
-            if (!values.ExercicioGrupo?.find((eg) => eg.GrupoId === g.Id)) {
-              values.ExercicioGrupo?.push({
-                Ativo: true,
-                ExercicioId: 0,
-                GrupoId: g.Id,
-                Id: 0,
-                Ip: values.Ip,
-              });
-            }
-          });
-
-          const gruposRemover: Array<number> = [];
-
-          if (
-            values.ExercicioGrupo &&
-            values.Grupo &&
-            values.ExercicioGrupo.length > values.Grupo.length
-          ) {
-            values.ExercicioGrupo.forEach((eg) => {
-              if (!values.Grupo?.find((g) => g.Id === eg.GrupoId)) {
-                gruposRemover.push(eg.GrupoId);
-              }
+            values.ExercicioGrupo?.push({
+              ExercicioId: values.Id,
+              GrupoId: g.Id,
             });
-          }
-
-          gruposRemover.forEach((grupoId) => {
-            values.ExercicioGrupo = values.ExercicioGrupo?.filter(
-              (eg) => eg.GrupoId !== grupoId
-            );
           });
 
           const Func = pathname.includes("editar") ? Update : Insert;
@@ -169,59 +145,13 @@ const ExercicioForm = () => {
               <Form className={classes.form}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Descricao}
-                      name="Descricao"
-                      placeholder="Descrição"
-                      label="Descrição"
-                      error={
-                        formik.touched.Descricao &&
-                        Boolean(formik.errors.Descricao)
-                      }
-                      helperText={
-                        formik.touched.Descricao && formik.errors.Descricao
-                      }
-                    />
+                    <CustomTextField name="Descricao" label="Descrição" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Nome}
-                      name="Nome"
-                      placeholder="Nome"
-                      label="Nome"
-                      error={formik.touched.Nome && Boolean(formik.errors.Nome)}
-                      helperText={formik.touched.Nome && formik.errors.Nome}
-                    />
+                    <CustomTextField name="Nome" label="Nome" />
                   </Grid>
                   <Grid item xs={12} sm={12}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.NomePopular}
-                      name="NomePopular"
-                      placeholder="Nome Popular"
-                      label="Nome Popular"
-                      error={
-                        formik.touched.NomePopular &&
-                        Boolean(formik.errors.NomePopular)
-                      }
-                      helperText={
-                        formik.touched.NomePopular && formik.errors.NomePopular
-                      }
-                    />
+                    <CustomTextField name="NomePopular" label="Nome Popular" />
                   </Grid>
                   <Grid item xs={12} sm={12}>
                     <GrupoAutocomplete formik={formik} />

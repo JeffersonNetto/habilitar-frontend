@@ -13,9 +13,8 @@ const Exercicios = () => {
   const [exercicios, setExercicios] = useState<Exercicio[] | undefined>();
   const { GetAll, Delete } = ExercicioService();
   const [open, setOpen] = useState(false);
-  const [exercicioExcluir, setExercicioExcluir] = useState<
-    Exercicio | undefined
-  >();
+  const [exercicioExcluir, setExercicioExcluir] =
+    useState<Exercicio | undefined>();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -86,6 +85,8 @@ const Exercicios = () => {
           sorting: true,
           paging: true,
           exportButton: true,
+          pageSize: 10,
+          emptyRowsWhenPaging: false,
           //actionsColumnIndex: -1,
         }}
         actions={[
