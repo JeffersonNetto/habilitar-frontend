@@ -9,12 +9,10 @@ const validationSchema = yup.object({
     .email("Informe um e-mail válido"),
   Password: yup.string().required("Informe sua senha"),
   ConfirmPassword: yup.string().required("Confirme sua senha"),
-  Pessoa: yup.object({
-    Nome: yup.string().required("Informe seu nome"),
-    Sobrenome: yup.string().required("Informe seu sobrenome"),
-    Cpf: yup.string().required("Informe seu CPF"),
-    DataNascimento: yup.date().required("Informe sua data de nascimento"),
-  }),
+  Nome: yup.string().required("Informe seu nome"),
+  Sobrenome: yup.string().required("Informe seu sobrenome"),
+  Cpf: yup.string().required("Informe seu CPF"),
+  DataNascimento: yup.date().required("Informe sua data de nascimento"),
 });
 
 export default validationSchema;

@@ -4,19 +4,15 @@ import Loader from "../../components/loader/Loader";
 import { useHistory } from "react-router-dom";
 import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import localization from "../../helpers/material-table-localization";
-import PessoaService from "../../services/PessoaService";
-import Pessoa from "../../models/Pessoa";
+import UsuarioService from "../../services/UsuarioService";
 import { format } from "date-fns";
+import User from "../../models/User";
 
 const Usuarios = () => {
   const history = useHistory();
-  const { GetAll } = PessoaService();
-  const [usuarios, setUsuarios] = useState<Pessoa[] | undefined>([]);
+  const { GetAll } = UsuarioService();
+  const [usuarios, setUsuarios] = useState<User[] | undefined>([]);
   const columns = [
-    {
-      title: "Id",
-      field: "Id",
-    },
     {
       title: "Nome",
       field: "Nome",
@@ -28,14 +24,19 @@ const Usuarios = () => {
     {
       title: "Data de nascimento",
       field: "DataNascimento",
-      render: (row: Pessoa) =>
+      render: (row: User) =>
+        row.DataNascimento &&
         format(new Date(row.DataNascimento), "dd/MM/yyyy"),
+    },
+    {
+      title: "Telefone",
+      field: "PhoneNumber",
     },
   ];
 
   useEffect(() => {
     GetAll()
-      .then((response: CustomResponse<Pessoa[]>) => {
+      .then((response: CustomResponse<User[]>) => {
         setUsuarios(response.Dados);
       })
       .catch((error: ErrorResponse) => {
@@ -66,7 +67,7 @@ const Usuarios = () => {
           icon: "edit",
           tooltip: "Editar",
           onClick: (event, rowData) => {
-            const usuario = rowData as Pessoa;
+            const usuario = rowData as User;
             history.push(`/app/usuarios/editar/${usuario.Id}`, usuario);
           },
         },

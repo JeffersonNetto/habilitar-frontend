@@ -1,21 +1,18 @@
 import RegisterUserViewModel from "../../view-models/RegisterUserViewModel";
 
 const initialValues: RegisterUserViewModel = {
-  ConfirmPassword: "",
   Password: "",
+  ConfirmPassword: "",
   Email: "",
   PhoneNumber: "",
   UserName: "",
-  Pessoa: {
-    Cpf: "",
-    DataNascimento: "",
-    Nome: "",
-    Sobrenome: "",
-    Sexo: "NI",
-    IntegracaoId: "",
-    Ip: "",
-    UsuarioCriacaoId: "",
-  },
+  Cpf: "",
+  DataNascimento: undefined,
+  Nome: "",
+  Sobrenome: "",
+  Sexo: "NI",
+  IntegracaoId: "",
+  Ip: "",
 };
 
 export default initialValues;

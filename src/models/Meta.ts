@@ -6,6 +6,7 @@ import Exercicio from "./Exercicio";
 import Usuario from "./User";
 
 export default interface Meta extends Entity {
+  Id: number;
   ExercicioId: number;
   QtdSeries: number;
   MetricaId: number;

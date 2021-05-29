@@ -1,6 +1,6 @@
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -21,11 +21,18 @@ import validationSchema from "./validationSchema";
 import initialValues from "./initialValues";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import Pessoa from "../../models/Pessoa";
-import { format } from "date-fns";
 import CustomTextField from "../../components/textfield/CustomTextField";
+import User from "../../models/User";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import ptBR from "date-fns/locale/pt-BR";
+import Utils from "@date-io/date-fns";
+import DatePicker from "material-ui-pickers/DatePicker";
+import DateFnsUtils from "@date-io/date-fns";
 
-let statePessoa: Pessoa;
+let stateUser: User;
 
 const UsuarioForm = () => {
   const classes = useStyles();
@@ -39,27 +46,30 @@ const UsuarioForm = () => {
 
   useEffect(() => {
     GetIp().then((response) => {
-      initialValues.Pessoa.Ip = response;
-      initialValues.Pessoa.UsuarioCriacaoId =
-        usuarioLogado?.Id || localStorage.getItem("hbusr");
+      initialValues.Ip = response;
     });
   }, []);
 
   if (pathname.includes("editar")) {
-    statePessoa = state as Pessoa;
+    stateUser = state as User;
 
-    initialValues.Email = statePessoa.User.Email;
-    initialValues.UserName = statePessoa.User.UserName;
-    initialValues.PhoneNumber = statePessoa.User.PhoneNumber;
-    initialValues.Pessoa.Nome = statePessoa.Nome;
-    initialValues.Pessoa.Sobrenome = statePessoa.Sobrenome;
-    initialValues.Pessoa.DataNascimento = format(
-      new Date(statePessoa.DataNascimento),
-      "yyyy-MM-dd"
-    );
-    initialValues.Pessoa.Sexo = statePessoa.Sexo || "NI";
-    initialValues.Pessoa.IntegracaoId = statePessoa.IntegracaoId || "";
-    initialValues.Pessoa.Cpf = statePessoa.Cpf;
+    console.log(stateUser);
+
+    initialValues.Nome = stateUser.Nome;
+    initialValues.Sobrenome = stateUser.Sobrenome;
+    initialValues.Email = stateUser.Email;
+    initialValues.UserName = stateUser.UserName;
+    initialValues.PhoneNumber = stateUser.PhoneNumber;
+    initialValues.Nome = stateUser.Nome;
+    initialValues.Sobrenome = stateUser.Sobrenome;
+    // initialValues.DataNascimento = format(
+    //   new Date(stateUser.DataNascimento),
+    //   "yyyy-MM-dd"
+    // );
+    initialValues.DataNascimento = stateUser.DataNascimento;
+    initialValues.Sexo = stateUser.Sexo || "NI";
+    initialValues.IntegracaoId = stateUser.IntegracaoId || "";
+    initialValues.Cpf = stateUser.Cpf;
   } else if (pathname.includes("criar")) {
   }
 
@@ -131,40 +141,33 @@ const UsuarioForm = () => {
               <Form className={classes.form}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField name="Pessoa.Nome" label="Nome" />
+                    <CustomTextField name="Nome" label="Nome" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField
-                      name="Pessoa.Sobrenome"
-                      label="Sobrenome"
-                    />
+                    <CustomTextField name="Sobrenome" label="Sobrenome" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField name="Pessoa.Cpf" label="CPF" />
+                    <CustomTextField name="Cpf" label="CPF" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="date"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Pessoa?.DataNascimento}
-                      name="Pessoa.DataNascimento"
-                      placeholder="Data de nascimento"
-                      label="Data de nascimento"
-                      error={
-                        formik.touched.Pessoa?.DataNascimento &&
-                        Boolean(formik.errors.Pessoa?.DataNascimento)
-                      }
-                      helperText={
-                        formik.touched.Pessoa?.DataNascimento &&
-                        formik.errors.Pessoa?.DataNascimento
-                      }
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
+                    <MuiPickersUtilsProvider locale={ptBR} utils={DateFnsUtils}>
+                      <KeyboardDatePicker
+                        fullWidth
+                        autoOk
+                        invalidDateMessage="A data informada é inválida"
+                        showTodayButton
+                        variant="inline"
+                        margin="none"
+                        name="DataNascimento"
+                        label="Data de nascimento"
+                        inputVariant="outlined"
+                        format="dd/MM/yyyy"
+                        value={formik.values.DataNascimento}
+                        onChange={(value) =>
+                          formik.setFieldValue("DataNascimento", value)
+                        }
+                      />
+                    </MuiPickersUtilsProvider>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <CustomTextField name="UserName" label="Nome de usuário" />
@@ -218,7 +221,7 @@ const UsuarioForm = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <CustomTextField
-                      name="Pessoa.IntegracaoId"
+                      name="IntegracaoId"
                       label="Integração Id"
                     />
                   </Grid>
@@ -228,8 +231,8 @@ const UsuarioForm = () => {
                       <Select
                         labelId="select-label"
                         id="select"
-                        value={formik.values.Pessoa.Sexo}
-                        name="Pessoa.Sexo"
+                        value={formik.values.Sexo}
+                        name="Sexo"
                         onChange={formik.handleChange}
                         label="Sexo"
                         autoWidth
