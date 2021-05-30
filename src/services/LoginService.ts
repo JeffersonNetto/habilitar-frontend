@@ -57,11 +57,12 @@ export default function LoginService() {
         api.defaults.headers.Authorization = `Bearer ${data.Dados.AccessToken}`;
         setAuthenticated(true);
         setUsuarioLogado(data.Dados.User);
+        const jwt: Jwt = jwt_decode(data.Dados.AccessToken);
+        setRole(jwt.role);
       }
 
       return data;
     } catch (error: any) {
-      console.log("error", typeof error.response);
       throw error.response;
     }
   }
