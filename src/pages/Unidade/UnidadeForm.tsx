@@ -63,8 +63,6 @@ const UnidadeForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          console.log(values);
-
           values.Empresa = undefined;
 
           const Func = pathname.includes("editar") ? Update : Insert;

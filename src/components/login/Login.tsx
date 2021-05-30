@@ -21,6 +21,7 @@ import Loader from "../loader/Loader";
 import { useHistory } from "react-router";
 import LoginViewModel from "../../view-models/LoginViewModel";
 import LoginResponseViewModel from "../../view-models/LoginResponseViewModel";
+import { ErrorResponse } from "../../helpers/Retorno";
 
 const validationSchema = yup.object({
   email: yup.string().required("Informe seu e-mail"),
@@ -89,13 +90,13 @@ const Login = () => {
           }, 1000);
         })
         .catch((error: any) => {
-          // let err: ErrorResponse = error?.response?.data;
-          // setAlertMessage({
-          //   severity: "error",
-          //   mensagem: err
-          //     ? err.Mensagem
-          //     : "Sistema temporariamente indisponível",
-          // });
+          let err: ErrorResponse = error?.response?.data;
+          setAlertMessage({
+            severity: "error",
+            mensagem: err.Erros
+              ? err.Erros.map((err) => err)
+              : "Sistema temporariamente indisponível",
+          });
           setOpen(true);
         })
         .finally(() => {

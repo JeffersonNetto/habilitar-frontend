@@ -31,11 +31,15 @@ import ptBR from "date-fns/locale/pt-BR";
 import Utils from "@date-io/date-fns";
 import DatePicker from "material-ui-pickers/DatePicker";
 import DateFnsUtils from "@date-io/date-fns";
+import UsuarioService from "../../services/UsuarioService";
+import RegisterUserViewModel from "../../view-models/RegisterUserViewModel";
+import { ErrorResponse } from "../../helpers/Retorno";
 
 let stateUser: User;
 
 const UsuarioForm = () => {
   const classes = useStyles();
+  const { Insert, Update } = UsuarioService();
   const { usuarioLogado } = useContext(Context);
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
@@ -53,8 +57,6 @@ const UsuarioForm = () => {
   if (pathname.includes("editar")) {
     stateUser = state as User;
 
-    console.log(stateUser);
-
     initialValues.Nome = stateUser.Nome;
     initialValues.Sobrenome = stateUser.Sobrenome;
     initialValues.Email = stateUser.Email;
@@ -71,6 +73,17 @@ const UsuarioForm = () => {
     initialValues.IntegracaoId = stateUser.IntegracaoId || "";
     initialValues.Cpf = stateUser.Cpf;
   } else if (pathname.includes("criar")) {
+    initialValues.Nome = "";
+    initialValues.Sobrenome = "";
+    initialValues.Email = "";
+    initialValues.UserName = "";
+    initialValues.PhoneNumber = "";
+    initialValues.Nome = "";
+    initialValues.Sobrenome = "";
+    initialValues.DataNascimento = undefined;
+    initialValues.Sexo = "NI";
+    initialValues.IntegracaoId = "";
+    initialValues.Cpf = "";
   }
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -87,13 +100,39 @@ const UsuarioForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          console.log(values);
+          const Func = pathname.includes("editar") ? Update : Insert;
 
-          // actions.setSubmitting(true);
+          Func(values as any)
+            .then((response: any) => {
+              setAlertMessage({
+                severity: "success",
+                mensagem: pathname.includes("editar")
+                  ? "Usuário alterado com sucesso"
+                  : "Usuário inserido com sucesso",
+              });
+              setOpen(true);
+            })
+            .catch((error: any) => {
+              let err = error.response.data;
+              setAlertMessage({
+                severity: "error",
+                mensagem: err.Erros
+                  ? err.Erros.map((err: string) => (
+                      <>
+                        {err}
+                        <br />
+                      </>
+                    ))
+                  : "Sistema temporariamente indisponível",
+              });
+              setOpen(true);
+            })
+            .finally(() => {
+              actions.setSubmitting(false);
+            });
 
           AuthService.Registrar(values)
             .then((response) => {
-              console.log(response);
               setAlertMessage({
                 severity: "success",
                 mensagem: "Usuário registrado com sucesso",
@@ -101,7 +140,6 @@ const UsuarioForm = () => {
               setOpen(true);
             })
             .catch((error) => {
-              console.log(error);
               setAlertMessage({
                 severity: "error",
                 mensagem: error
@@ -155,7 +193,6 @@ const UsuarioForm = () => {
                         fullWidth
                         autoOk
                         invalidDateMessage="A data informada é inválida"
-                        showTodayButton
                         variant="inline"
                         margin="none"
                         name="DataNascimento"

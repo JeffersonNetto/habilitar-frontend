@@ -64,13 +64,10 @@ const GrupoForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          console.log(values);
-
           const Func = pathname.includes("editar") ? Update : Insert;
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
             .then((response: CustomResponse<Grupo>) => {
-              console.log(response);
               setAlertMessage({
                 severity: "success",
                 mensagem: pathname.includes("editar")
@@ -80,7 +77,6 @@ const GrupoForm = () => {
               setOpen(true);
             })
             .catch((error: ErrorResponse) => {
-              console.log(error.Erros);
               setAlertMessage({
                 severity: "error",
                 mensagem: error.Erros

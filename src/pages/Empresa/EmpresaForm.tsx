@@ -68,8 +68,6 @@ const EmpresaForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          console.log(values);
-
           const Func = pathname.includes("editar") ? Update : Insert;
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)

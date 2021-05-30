@@ -41,9 +41,7 @@ const Unidades = () => {
           setUnidades(response.Dados);
         }
       })
-      .catch((error: ErrorResponse) => {
-        console.log(error);
-      });
+      .catch((error: ErrorResponse) => {});
   }, []);
 
   const columns = [

@@ -58,9 +58,6 @@ const ExercicioForm = () => {
         initialValues.Grupo?.push(eg.Grupo);
       }
     });
-
-    console.log("stateExercicio", stateExercicio);
-    console.log("initialValues", initialValues);
   } else if (pathname.includes("criar")) {
     initialValues.Id = 0;
     initialValues.Descricao = "";
@@ -95,7 +92,6 @@ const ExercicioForm = () => {
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
             .then((response: CustomResponse<Exercicio>) => {
-              console.log(response);
               setAlertMessage({
                 severity: "success",
                 mensagem: pathname.includes("editar")

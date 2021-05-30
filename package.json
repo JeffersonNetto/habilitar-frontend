@@ -18,6 +18,7 @@
     "date-fns": "^2.21.3",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",
+    "jwt-decode": "^3.1.2",
     "material-table": "^1.69.2",
     "material-ui-formik-components": "^0.7.3",
     "material-ui-pickers": "^2.2.4",

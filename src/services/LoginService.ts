@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import LoginResponseViewModel from "../view-models/LoginResponseViewModel";
 import LoginViewModel from "../view-models/LoginViewModel";
 import { CustomResponse } from "../helpers/Retorno";
+import jwt_decode from "jwt-decode";
 
 const url = "auth/entrar";
 
@@ -18,6 +19,9 @@ export default function LoginService() {
     if (token) {
       api.defaults.headers.Authorization = `Bearer ${token}`;
       setAuthenticated(true);
+
+      const decoded = jwt_decode(token);
+      console.log("decoded", decoded);
     }
 
     setLoading(false);

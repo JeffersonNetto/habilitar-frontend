@@ -18,7 +18,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withRouter } from "react-router-dom";
 import { RotasInternas } from "../../routes";
-import { mainListItems } from "./mainListItems";
+import { MainListItems } from "./mainListItems";
 import { secondaryListItems } from "./secondaryListItems";
 import { useStyles } from "./useStyles";
 
@@ -93,7 +93,7 @@ function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List>{MainListItems()}</List>
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>

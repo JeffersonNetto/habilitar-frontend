@@ -37,15 +37,10 @@ const Grupos = () => {
   useEffect(() => {
     GetAll()
       .then((response: CustomResponse<Grupo[]>) => {
-        console.log(response.Dados);
         setGrupos(response.Dados);
-        setTimeout(() => {
-          console.log(grupos);
-        }, 1000);
+        setTimeout(() => {}, 1000);
       })
-      .catch((error: ErrorResponse) => {
-        console.log(error);
-      });
+      .catch((error: ErrorResponse) => {});
   }, []);
 
   const columns = [

@@ -64,13 +64,10 @@ const IntervaloForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          console.log(values);
-
           const Func = pathname.includes("editar") ? Update : Insert;
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
             .then((response: CustomResponse<Intervalo>) => {
-              console.log(response);
               setAlertMessage({
                 severity: "success",
                 mensagem: pathname.includes("editar")
@@ -80,7 +77,6 @@ const IntervaloForm = () => {
               setOpen(true);
             })
             .catch((error: ErrorResponse) => {
-              console.log(error.Erros);
               setAlertMessage({
                 severity: "error",
                 mensagem: error
