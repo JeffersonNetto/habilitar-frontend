@@ -13,7 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import useStyles from "./useStyles";
 import { useState, useContext, useEffect } from "react";
-import { Snackbar } from "@material-ui/core";
+import { Card, Container, Snackbar } from "@material-ui/core";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { Context } from "../../context/AuthContext";
@@ -22,6 +22,7 @@ import { useHistory } from "react-router";
 import LoginViewModel from "../../view-models/LoginViewModel";
 import LoginResponseViewModel from "../../view-models/LoginResponseViewModel";
 import { ErrorResponse } from "../../helpers/Retorno";
+import { CardMedia } from "@material-ui/core";
 
 const validationSchema = yup.object({
   email: yup.string().required("Informe seu e-mail"),
@@ -90,7 +91,8 @@ const Login = () => {
           }, 1000);
         })
         .catch((error: any) => {
-          let err: ErrorResponse = error?.response?.data;
+          console.warn(error);
+          let err: ErrorResponse = error?.data;
           setAlertMessage({
             severity: "error",
             mensagem: err.Erros
@@ -128,7 +130,11 @@ const Login = () => {
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-          <img src="/LOGO_TARJA_A_AZUL.png" height="128" alt="logo" />
+          <Grid container>
+            <Grid item xs={12} style={{ display: "flex", flexFlow: "column" }}>
+              <img src="/LOGO_TARJA_A_AZUL.png" alt="logo" />
+            </Grid>
+          </Grid>
           <form className={classes.form} onSubmit={formik.handleSubmit}>
             <TextField
               variant="outlined"

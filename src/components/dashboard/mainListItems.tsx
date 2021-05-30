@@ -5,30 +5,15 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PeopleIcon from "@material-ui/icons/People";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import LayersIcon from "@material-ui/icons/Layers";
-import jwt_decode from "jwt-decode";
-interface Jwt {
-  aud: string;
-  email: string;
-  exp: string;
-  iat: string;
-  iss: string;
-  nbf: string;
-  role: string;
-  sub: string;
-}
-
-let jwt: Jwt | undefined;
+import { useContext } from "react";
+import { Context } from "../../context/AuthContext";
 
 export const MainListItems = () => {
-  const token = localStorage.getItem("token");
-
-  if (token) {
-    jwt = jwt_decode(token);
-  }
+  const { role } = useContext(Context);
 
   return (
     <div>
-      {jwt?.role === "Admin" && (
+      {role && role === "Admin" && (
         <ListItem button>
           <Link
             to="/app/usuarios"

@@ -1,3 +1,4 @@
+import { ErrorResponse } from "./../helpers/Retorno";
 import Usuario from "../models/User";
 import api from "../interceptor/http-interceptor";
 import { useState, useEffect } from "react";
@@ -5,6 +6,16 @@ import LoginResponseViewModel from "../view-models/LoginResponseViewModel";
 import LoginViewModel from "../view-models/LoginViewModel";
 import { CustomResponse } from "../helpers/Retorno";
 import jwt_decode from "jwt-decode";
+interface Jwt {
+  aud: string;
+  email: string;
+  exp: string;
+  iat: string;
+  iss: string;
+  nbf: string;
+  role: string;
+  sub: string;
+}
 
 const url = "auth/entrar";
 
@@ -12,6 +23,7 @@ export default function LoginService() {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [usuarioLogado, setUsuarioLogado] = useState<Usuario>();
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -20,8 +32,8 @@ export default function LoginService() {
       api.defaults.headers.Authorization = `Bearer ${token}`;
       setAuthenticated(true);
 
-      const decoded = jwt_decode(token);
-      console.log("decoded", decoded);
+      const jwt: Jwt = jwt_decode(token);
+      setRole(jwt.role);
     }
 
     setLoading(false);
@@ -41,7 +53,6 @@ export default function LoginService() {
       );
 
       if (data.Dados.AccessToken) {
-        localStorage.setItem("hbusr", data.Dados.User.Id);
         localStorage.setItem("token", data.Dados.AccessToken);
         api.defaults.headers.Authorization = `Bearer ${data.Dados.AccessToken}`;
         setAuthenticated(true);
@@ -49,8 +60,9 @@ export default function LoginService() {
       }
 
       return data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      console.log("error", typeof error.response);
+      throw error.response;
     }
   }
 
@@ -61,5 +73,12 @@ export default function LoginService() {
     api.defaults.headers.Authorization = undefined;
   }
 
-  return { authenticated, loading, handleLogin, handleLogout, usuarioLogado };
+  return {
+    authenticated,
+    loading,
+    handleLogin,
+    handleLogout,
+    usuarioLogado,
+    role,
+  };
 }

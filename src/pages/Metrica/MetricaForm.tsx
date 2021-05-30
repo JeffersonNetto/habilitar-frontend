@@ -36,8 +36,6 @@ const MetricaForm = () => {
   useEffect(() => {
     GetIp().then((response) => {
       initialValues.Ip = response;
-      initialValues.UsuarioCriacaoId =
-        usuarioLogado?.Id || localStorage.getItem("hbusr");
     });
   }, []);
 

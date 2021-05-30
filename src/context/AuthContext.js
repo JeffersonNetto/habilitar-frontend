@@ -11,6 +11,7 @@ function AuthProvider({ children }) {
     handleLogin,
     handleLogout,
     usuarioLogado,
+    role,
   } = LoginService();
 
   return (
@@ -21,6 +22,7 @@ function AuthProvider({ children }) {
         handleLogin,
         handleLogout,
         usuarioLogado,
+        role,
       }}
     >
       {children}
