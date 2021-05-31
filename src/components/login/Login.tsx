@@ -1,4 +1,3 @@
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -9,20 +8,17 @@ import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import useStyles from "./useStyles";
 import { useState, useContext, useEffect } from "react";
-import { Card, Container, Snackbar } from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { Context } from "../../context/AuthContext";
 import Loader from "../loader/Loader";
 import { useHistory } from "react-router";
 import LoginViewModel from "../../view-models/LoginViewModel";
-import LoginResponseViewModel from "../../view-models/LoginResponseViewModel";
 import { ErrorResponse } from "../../helpers/Retorno";
-import { CardMedia } from "@material-ui/core";
 
 const validationSchema = yup.object({
   email: yup.string().required("Informe seu e-mail"),
@@ -72,38 +68,35 @@ const Login = () => {
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setLoading(true);
       const usuario: LoginViewModel = {
         Email: values.email,
         Password: values.password,
       };
 
-      handleLogin(usuario)
-        .then((response: LoginResponseViewModel) => {
-          setAlertMessage({
-            severity: "success",
-            mensagem: "Login realizado com sucesso",
-          });
-          setOpen(true);
-          setTimeout(() => {
-            history.push("/");
-          }, 1000);
-        })
-        .catch((error: any) => {
-          console.warn(error);
-          let err: ErrorResponse = error?.data;
-          setAlertMessage({
-            severity: "error",
-            mensagem: err.Erros
-              ? err.Erros.map((err) => err)
-              : "Sistema temporariamente indisponível",
-          });
-          setOpen(true);
-        })
-        .finally(() => {
-          setLoading(false);
+      try {
+        await handleLogin(usuario);
+        setAlertMessage({
+          severity: "success",
+          mensagem: "Login realizado com sucesso",
         });
+        setOpen(true);
+        setTimeout(() => {
+          history.push("/");
+        }, 1000);
+      } catch (error) {
+        let err: ErrorResponse = error?.data;
+        setAlertMessage({
+          severity: "error",
+          mensagem: err.Erros
+            ? err.Erros.map((err) => err)
+            : "Sistema temporariamente indisponível",
+        });
+        setOpen(true);
+      } finally {
+        setLoading(false);
+      }
     },
     validationSchema: validationSchema,
   });

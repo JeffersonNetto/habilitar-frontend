@@ -11,4 +11,5 @@ export default interface RegisterUserViewModel {
   Sexo: string;
   IntegracaoId: string;
   Ip: string;
+  Role: string;
 }

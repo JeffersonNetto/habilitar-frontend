@@ -13,6 +13,7 @@ const initialValues: RegisterUserViewModel = {
   Sexo: "NI",
   IntegracaoId: "",
   Ip: "",
+  Role: "",
 };
 
 export default initialValues;

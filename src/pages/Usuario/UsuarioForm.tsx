@@ -34,8 +34,9 @@ import DateFnsUtils from "@date-io/date-fns";
 import UsuarioService from "../../services/UsuarioService";
 import RegisterUserViewModel from "../../view-models/RegisterUserViewModel";
 import { ErrorResponse } from "../../helpers/Retorno";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
-let stateUser: User;
+let stateUser: RegisterUserViewModel;
 
 const UsuarioForm = () => {
   const classes = useStyles();
@@ -55,7 +56,7 @@ const UsuarioForm = () => {
   }, []);
 
   if (pathname.includes("editar")) {
-    stateUser = state as User;
+    stateUser = state as RegisterUserViewModel;
 
     initialValues.Nome = stateUser.Nome;
     initialValues.Sobrenome = stateUser.Sobrenome;
@@ -72,6 +73,7 @@ const UsuarioForm = () => {
     initialValues.Sexo = stateUser.Sexo || "NI";
     initialValues.IntegracaoId = stateUser.IntegracaoId || "";
     initialValues.Cpf = stateUser.Cpf;
+    initialValues.Role = stateUser.Role || "";
   } else if (pathname.includes("criar")) {
     initialValues.Nome = "";
     initialValues.Sobrenome = "";
@@ -84,6 +86,7 @@ const UsuarioForm = () => {
     initialValues.Sexo = "NI";
     initialValues.IntegracaoId = "";
     initialValues.Cpf = "";
+    initialValues.Role = "";
   }
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -264,13 +267,14 @@ const UsuarioForm = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <FormControl variant="outlined" fullWidth>
-                      <InputLabel id="select-label">Sexo</InputLabel>
+                      <InputLabel id="select-label-sexo">Sexo</InputLabel>
                       <Select
-                        labelId="select-label"
-                        id="select"
+                        labelId="select-label-sexo"
+                        id="select-sexo"
                         value={formik.values.Sexo}
                         name="Sexo"
                         onChange={formik.handleChange}
+                        placeholder="Sexo"
                         label="Sexo"
                         autoWidth
                       >
@@ -280,6 +284,38 @@ const UsuarioForm = () => {
                         <MenuItem value="F">Feminino</MenuItem>
                         <MenuItem value="M">Masculino</MenuItem>
                       </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <FormControl
+                      variant="outlined"
+                      fullWidth
+                      error={formik.touched.Role && Boolean(formik.errors.Role)}
+                    >
+                      <InputLabel id="select-label-perfil">Perfil</InputLabel>
+                      <Select
+                        labelId="select-label-perfil"
+                        id="select-perfil"
+                        value={formik.values.Role}
+                        name="Role"
+                        onChange={formik.handleChange}
+                        label="Perfil"
+                        autoWidth
+                        placeholder="Perfil"
+                      >
+                        <MenuItem value="">
+                          <em></em>
+                        </MenuItem>
+                        <MenuItem value="Admin">Admin</MenuItem>
+                        <MenuItem value="Auxiliar">Auxiliar</MenuItem>
+                        <MenuItem value="Fisioterapeuta">
+                          Fisioterapeuta
+                        </MenuItem>
+                        <MenuItem value="Paciente">Paciente</MenuItem>
+                      </Select>
+                      {formik.touched.Role && Boolean(formik.errors.Role) && (
+                        <FormHelperText>{formik.errors.Role}</FormHelperText>
+                      )}
                     </FormControl>
                   </Grid>
                 </Grid>
