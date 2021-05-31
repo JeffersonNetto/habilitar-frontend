@@ -58,22 +58,24 @@ const UsuarioForm = () => {
   if (pathname.includes("editar")) {
     stateUser = state as RegisterUserViewModel;
 
-    initialValues.Nome = stateUser.Nome;
-    initialValues.Sobrenome = stateUser.Sobrenome;
-    initialValues.Email = stateUser.Email;
-    initialValues.UserName = stateUser.UserName;
-    initialValues.PhoneNumber = stateUser.PhoneNumber;
-    initialValues.Nome = stateUser.Nome;
-    initialValues.Sobrenome = stateUser.Sobrenome;
-    // initialValues.DataNascimento = format(
-    //   new Date(stateUser.DataNascimento),
-    //   "yyyy-MM-dd"
-    // );
-    initialValues.DataNascimento = stateUser.DataNascimento;
-    initialValues.Sexo = stateUser.Sexo || "NI";
-    initialValues.IntegracaoId = stateUser.IntegracaoId || "";
-    initialValues.Cpf = stateUser.Cpf;
-    initialValues.Role = stateUser.Role || "";
+    Object.assign(initialValues, stateUser);
+
+    // initialValues.Nome = stateUser.Nome;
+    // initialValues.Sobrenome = stateUser.Sobrenome;
+    // initialValues.Email = stateUser.Email;
+    // initialValues.UserName = stateUser.UserName;
+    // initialValues.PhoneNumber = stateUser.PhoneNumber;
+    // initialValues.Nome = stateUser.Nome;
+    // initialValues.Sobrenome = stateUser.Sobrenome;
+    // // initialValues.DataNascimento = format(
+    // //   new Date(stateUser.DataNascimento),
+    // //   "yyyy-MM-dd"
+    // // );
+    // initialValues.DataNascimento = stateUser.DataNascimento;
+    // initialValues.Sexo = stateUser.Sexo || "NI";
+    // initialValues.IntegracaoId = stateUser.IntegracaoId || "";
+    // initialValues.Cpf = stateUser.Cpf;
+    // initialValues.Role = stateUser.Role || "";
   } else if (pathname.includes("criar")) {
     initialValues.Nome = "";
     initialValues.Sobrenome = "";

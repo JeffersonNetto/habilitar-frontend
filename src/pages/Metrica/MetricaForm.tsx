@@ -41,10 +41,7 @@ const MetricaForm = () => {
 
   if (pathname.includes("editar")) {
     stateMetrica = state as Metrica;
-    initialValues.Id = stateMetrica.Id;
-    initialValues.Descricao = stateMetrica.Descricao;
-    initialValues.Observacao = stateMetrica.Observacao;
-    initialValues.Sigla = stateMetrica.Sigla;
+    Object.assign(initialValues, stateMetrica);
   } else if (pathname.includes("criar")) {
     initialValues.Id = 0;
     initialValues.Descricao = "";
