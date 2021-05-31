@@ -1,6 +1,6 @@
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -19,34 +19,30 @@ import AuthService from "../../services/AuthService";
 import useStyles from "./useStyles";
 import validationSchema from "./validationSchema";
 import initialValues from "./initialValues";
-import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import CustomTextField from "../../components/textfield/CustomTextField";
-import User from "../../models/User";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import ptBR from "date-fns/locale/pt-BR";
-import Utils from "@date-io/date-fns";
-import DatePicker from "material-ui-pickers/DatePicker";
 import DateFnsUtils from "@date-io/date-fns";
 import UsuarioService from "../../services/UsuarioService";
 import RegisterUserViewModel from "../../view-models/RegisterUserViewModel";
-import { ErrorResponse } from "../../helpers/Retorno";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import CustomSnackbar, {
+  AlertMessage,
+} from "../../components/snackbar/CustomSnackbar";
 
 let stateUser: RegisterUserViewModel;
 
 const UsuarioForm = () => {
   const classes = useStyles();
   const { Insert, Update } = UsuarioService();
-  const { usuarioLogado } = useContext(Context);
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<any>({
-    severity: "",
-    mensagem: "",
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    severity: undefined,
+    message: "",
   });
 
   useEffect(() => {
@@ -59,23 +55,6 @@ const UsuarioForm = () => {
     stateUser = state as RegisterUserViewModel;
 
     Object.assign(initialValues, stateUser);
-
-    // initialValues.Nome = stateUser.Nome;
-    // initialValues.Sobrenome = stateUser.Sobrenome;
-    // initialValues.Email = stateUser.Email;
-    // initialValues.UserName = stateUser.UserName;
-    // initialValues.PhoneNumber = stateUser.PhoneNumber;
-    // initialValues.Nome = stateUser.Nome;
-    // initialValues.Sobrenome = stateUser.Sobrenome;
-    // // initialValues.DataNascimento = format(
-    // //   new Date(stateUser.DataNascimento),
-    // //   "yyyy-MM-dd"
-    // // );
-    // initialValues.DataNascimento = stateUser.DataNascimento;
-    // initialValues.Sexo = stateUser.Sexo || "NI";
-    // initialValues.IntegracaoId = stateUser.IntegracaoId || "";
-    // initialValues.Cpf = stateUser.Cpf;
-    // initialValues.Role = stateUser.Role || "";
   } else if (pathname.includes("criar")) {
     initialValues.Nome = "";
     initialValues.Sobrenome = "";
@@ -111,7 +90,7 @@ const UsuarioForm = () => {
             .then((response: any) => {
               setAlertMessage({
                 severity: "success",
-                mensagem: pathname.includes("editar")
+                message: pathname.includes("editar")
                   ? "Usuário alterado com sucesso"
                   : "Usuário inserido com sucesso",
               });
@@ -121,7 +100,7 @@ const UsuarioForm = () => {
               let err = error.response.data;
               setAlertMessage({
                 severity: "error",
-                mensagem: err.Erros
+                message: err.Erros
                   ? err.Erros.map((err: string) => (
                       <>
                         {err}
@@ -140,14 +119,14 @@ const UsuarioForm = () => {
             .then((response) => {
               setAlertMessage({
                 severity: "success",
-                mensagem: "Usuário registrado com sucesso",
+                message: "Usuário registrado com sucesso",
               });
               setOpen(true);
             })
             .catch((error) => {
               setAlertMessage({
                 severity: "error",
-                mensagem: error
+                message: error
                   ? error.Mensagem
                   : "Sistema temporariamente indisponível",
               });
@@ -162,7 +141,12 @@ const UsuarioForm = () => {
           <Container component="main" maxWidth="xl">
             <CssBaseline />
 
-            <Snackbar
+            <CustomSnackbar
+              state={[open, setOpen]}
+              alertMessage={alertMessage}
+            />
+
+            {/* <Snackbar
               open={open}
               autoHideDuration={6000}
               onClose={handleClose}
@@ -175,7 +159,7 @@ const UsuarioForm = () => {
               >
                 <div style={{ fontSize: "1rem" }}>{alertMessage.mensagem}</div>
               </Alert>
-            </Snackbar>
+            </Snackbar> */}
 
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">

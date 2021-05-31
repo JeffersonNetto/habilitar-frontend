@@ -19,6 +19,7 @@ import Loader from "../loader/Loader";
 import { useHistory } from "react-router";
 import LoginViewModel from "../../view-models/LoginViewModel";
 import { ErrorResponse } from "../../helpers/Retorno";
+import CustomSnackbar, { AlertMessage } from "../snackbar/CustomSnackbar";
 
 const validationSchema = yup.object({
   email: yup.string().required("Informe seu e-mail"),
@@ -50,18 +51,10 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<any>({
-    severity: "",
-    mensagem: "",
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    severity: undefined,
+    message: "",
   });
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -79,7 +72,7 @@ const Login = () => {
         await handleLogin(usuario);
         setAlertMessage({
           severity: "success",
-          mensagem: "Login realizado com sucesso",
+          message: "Login realizado com sucesso",
         });
         setOpen(true);
         setTimeout(() => {
@@ -89,7 +82,7 @@ const Login = () => {
         let err: ErrorResponse = error?.data;
         setAlertMessage({
           severity: "error",
-          mensagem: err.Erros
+          message: err.Erros
             ? err.Erros.map((err) => err)
             : "Sistema temporariamente indisponível",
         });
@@ -105,20 +98,7 @@ const Login = () => {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
 
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={alertMessage.severity}
-          variant="filled"
-        >
-          <div style={{ fontSize: "1rem" }}>{alertMessage.mensagem}</div>
-        </Alert>
-      </Snackbar>
+      <CustomSnackbar state={[open, setOpen]} alertMessage={alertMessage} />
 
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
