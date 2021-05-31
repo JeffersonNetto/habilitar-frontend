@@ -1,5 +1,3 @@
-import { ErrorResponse } from "./../helpers/Retorno";
-import Usuario from "../models/User";
 import api from "../interceptor/http-interceptor";
 import { useState, useEffect } from "react";
 import LoginResponseViewModel from "../view-models/LoginResponseViewModel";
@@ -22,7 +20,7 @@ const url = "auth/entrar";
 export default function LoginService() {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [usuarioLogado, setUsuarioLogado] = useState<Usuario>();
+  const [usuarioLogadoId, setUsuarioLogadoId] = useState<string>();
   const [role, setRole] = useState("");
 
   useEffect(() => {
@@ -33,7 +31,9 @@ export default function LoginService() {
       setAuthenticated(true);
 
       const jwt: Jwt = jwt_decode(token);
+
       setRole(jwt.role);
+      setUsuarioLogadoId(jwt.sub);
     }
 
     setLoading(false);
@@ -56,7 +56,7 @@ export default function LoginService() {
         localStorage.setItem("token", data.Dados.AccessToken);
         api.defaults.headers.Authorization = `Bearer ${data.Dados.AccessToken}`;
         setAuthenticated(true);
-        setUsuarioLogado(data.Dados.User);
+        setUsuarioLogadoId(data.Dados.User.Id);
         const jwt: Jwt = jwt_decode(data.Dados.AccessToken);
         setRole(jwt.role);
       }
@@ -69,7 +69,7 @@ export default function LoginService() {
 
   async function handleLogout() {
     setAuthenticated(false);
-    setUsuarioLogado(undefined);
+    setUsuarioLogadoId(undefined);
     localStorage.removeItem("token");
     api.defaults.headers.Authorization = undefined;
   }
@@ -79,7 +79,7 @@ export default function LoginService() {
     loading,
     handleLogin,
     handleLogout,
-    usuarioLogado,
+    usuarioLogadoId,
     role,
   };
 }

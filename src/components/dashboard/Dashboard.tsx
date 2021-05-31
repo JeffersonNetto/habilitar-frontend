@@ -21,9 +21,11 @@ import { RotasInternas } from "../../routes";
 import { MainListItems } from "./mainListItems";
 import { secondaryListItems } from "./secondaryListItems";
 import { useStyles } from "./useStyles";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
-  const { handleLogout } = useContext(Context);
+  const { handleLogout, usuarioLogadoId } = useContext(Context);
 
   const classes = useStyles();
 
@@ -73,6 +75,18 @@ function Dashboard() {
               <NotificationsIcon />
             </Badge>
           </IconButton>
+
+          <Link
+            to={`/app/usuarios/editar/${usuarioLogadoId}`}
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            <Tooltip title="Meu perfil">
+              <IconButton color="inherit">
+                <AccountCircleIcon />
+              </IconButton>
+            </Tooltip>
+          </Link>
+
           <Tooltip title="Sair">
             <IconButton onClick={handleLogout} color="inherit">
               <ExitToAppIcon />
