@@ -19,18 +19,20 @@ import Alert from "@material-ui/lab/Alert";
 import Empresa from "../../models/Empresa";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
 import CustomTextField from "../../components/textfield/CustomTextField";
+import CustomSnackbar, {
+  AlertMessage,
+} from "../../components/snackbar/CustomSnackbar";
 
 let stateEmpresa: Empresa;
 
 const EmpresaForm = () => {
   const classes = useStyles();
   const { Insert, Update } = EmpresaService();
-  const { usuarioLogado } = useContext(Context);
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<any>({
-    severity: "",
-    mensagem: "",
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    severity: undefined,
+    message: "",
   });
 
   useEffect(() => {
@@ -41,24 +43,14 @@ const EmpresaForm = () => {
 
   if (pathname.includes("editar")) {
     stateEmpresa = state as Empresa;
-    initialValues.Id = stateEmpresa.Id;
-    initialValues.NomeFantasia = stateEmpresa.NomeFantasia;
-    initialValues.RazaoSocial = stateEmpresa.RazaoSocial;
-    initialValues.Cnpj = stateEmpresa.Cnpj;
+
+    Object.assign(initialValues, stateEmpresa);
   } else if (pathname.includes("criar")) {
     initialValues.Id = 0;
     initialValues.NomeFantasia = "";
     initialValues.RazaoSocial = "";
     initialValues.Cnpj = "";
   }
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   return (
     <div>
@@ -73,18 +65,23 @@ const EmpresaForm = () => {
               console.log(response);
               setAlertMessage({
                 severity: "success",
-                mensagem: pathname.includes("editar")
+                message: pathname.includes("editar")
                   ? "Métrica alterada com sucesso"
                   : "Métrica inserida com sucesso",
               });
               setOpen(true);
             })
-            .catch((error: ErrorResponse) => {
-              console.log(error.Erros);
+            .catch((error: any) => {
+              let err: ErrorResponse = error.response.data;
               setAlertMessage({
                 severity: "error",
-                mensagem: error
-                  ? error.Erros.map((err) => <p>{err}</p>)
+                message: err.Erros
+                  ? err.Erros.map((err: string) => (
+                      <>
+                        {err}
+                        <br />
+                      </>
+                    ))
                   : "Sistema temporariamente indisponível",
               });
               setOpen(true);
@@ -98,20 +95,10 @@ const EmpresaForm = () => {
           <Container component="main" maxWidth="xl">
             <CssBaseline />
 
-            <Snackbar
-              open={open}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-              <Alert
-                onClose={handleClose}
-                severity={alertMessage.severity}
-                variant="filled"
-              >
-                <div style={{ fontSize: "1rem" }}>{alertMessage.mensagem}</div>
-              </Alert>
-            </Snackbar>
+            <CustomSnackbar
+              alertMessage={alertMessage}
+              state={[open, setOpen]}
+            />
 
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">

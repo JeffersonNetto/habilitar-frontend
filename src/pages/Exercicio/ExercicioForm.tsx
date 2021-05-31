@@ -20,18 +20,20 @@ import Exercicio from "../../models/Exercicio";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
 import GrupoAutocomplete from "../../components/autocomplete/GrupoAutocomplete";
 import CustomTextField from "../../components/textfield/CustomTextField";
+import CustomSnackbar, {
+  AlertMessage,
+} from "../../components/snackbar/CustomSnackbar";
 
 let stateExercicio: Exercicio;
 
 const ExercicioForm = () => {
   const classes = useStyles();
   const { Insert, Update } = ExercicioService();
-  const { usuarioLogado } = useContext(Context);
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<any>({
-    severity: "",
-    mensagem: "",
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    severity: undefined,
+    message: "",
   });
 
   useEffect(() => {
@@ -63,14 +65,6 @@ const ExercicioForm = () => {
     initialValues.NomePopular = "";
   }
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
-
   return (
     <div>
       <Formik
@@ -92,18 +86,23 @@ const ExercicioForm = () => {
             .then((response: CustomResponse<Exercicio>) => {
               setAlertMessage({
                 severity: "success",
-                mensagem: pathname.includes("editar")
+                message: pathname.includes("editar")
                   ? "Exercício alterado com sucesso"
                   : "Exercício inserido com sucesso",
               });
               setOpen(true);
             })
-            .catch((error: ErrorResponse) => {
-              console.log(error.Erros);
+            .catch((error: any) => {
+              let err: ErrorResponse = error.response.data;
               setAlertMessage({
                 severity: "error",
-                mensagem: error.Erros
-                  ? error.Erros.map((err) => <p>{err}</p>)
+                message: err.Erros
+                  ? err.Erros.map((err: string) => (
+                      <>
+                        {err}
+                        <br />
+                      </>
+                    ))
                   : "Sistema temporariamente indisponível",
               });
               setOpen(true);
@@ -117,20 +116,10 @@ const ExercicioForm = () => {
           <Container component="main" maxWidth="xl">
             <CssBaseline />
 
-            <Snackbar
-              open={open}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-              <Alert
-                onClose={handleClose}
-                severity={alertMessage.severity}
-                variant="filled"
-              >
-                <div style={{ fontSize: "1rem" }}>{alertMessage.mensagem}</div>
-              </Alert>
-            </Snackbar>
+            <CustomSnackbar
+              state={[open, setOpen]}
+              alertMessage={alertMessage}
+            />
 
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">

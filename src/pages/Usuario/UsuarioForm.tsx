@@ -1,5 +1,4 @@
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import { Formik, Form } from "formik";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -7,15 +6,13 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Loader from "../../components/loader/Loader";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Context } from "../../context/AuthContext";
 import GetIp from "../../services/IpService";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import AuthService from "../../services/AuthService";
 import useStyles from "./useStyles";
 import validationSchema from "./validationSchema";
 import initialValues from "./initialValues";
@@ -32,6 +29,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
+import { ErrorResponse } from "../../helpers/Retorno";
 
 let stateUser: RegisterUserViewModel;
 
@@ -64,19 +62,11 @@ const UsuarioForm = () => {
     initialValues.Nome = "";
     initialValues.Sobrenome = "";
     initialValues.DataNascimento = undefined;
-    initialValues.Sexo = "NI";
+    initialValues.Sexo = "";
     initialValues.IntegracaoId = "";
     initialValues.Cpf = "";
     initialValues.Role = "";
   }
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   return (
     <div>
@@ -97,7 +87,7 @@ const UsuarioForm = () => {
               setOpen(true);
             })
             .catch((error: any) => {
-              let err = error.response.data;
+              let err: ErrorResponse = error.response.data;
               setAlertMessage({
                 severity: "error",
                 message: err.Erros
@@ -107,27 +97,6 @@ const UsuarioForm = () => {
                         <br />
                       </>
                     ))
-                  : "Sistema temporariamente indisponível",
-              });
-              setOpen(true);
-            })
-            .finally(() => {
-              actions.setSubmitting(false);
-            });
-
-          AuthService.Registrar(values)
-            .then((response) => {
-              setAlertMessage({
-                severity: "success",
-                message: "Usuário registrado com sucesso",
-              });
-              setOpen(true);
-            })
-            .catch((error) => {
-              setAlertMessage({
-                severity: "error",
-                message: error
-                  ? error.Mensagem
                   : "Sistema temporariamente indisponível",
               });
               setOpen(true);
@@ -145,21 +114,6 @@ const UsuarioForm = () => {
               state={[open, setOpen]}
               alertMessage={alertMessage}
             />
-
-            {/* <Snackbar
-              open={open}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-              <Alert
-                onClose={handleClose}
-                severity={alertMessage.severity}
-                variant="filled"
-              >
-                <div style={{ fontSize: "1rem" }}>{alertMessage.mensagem}</div>
-              </Alert>
-            </Snackbar> */}
 
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">
@@ -188,7 +142,7 @@ const UsuarioForm = () => {
                         label="Data de nascimento"
                         inputVariant="outlined"
                         format="dd/MM/yyyy"
-                        value={formik.values.DataNascimento}
+                        value={formik.values.DataNascimento || null}
                         onChange={(value) =>
                           formik.setFieldValue("DataNascimento", value)
                         }
@@ -205,53 +159,12 @@ const UsuarioForm = () => {
                     <CustomTextField name="Email" label="E-mail" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="password"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.Password}
-                      name="Password"
-                      placeholder="Senha"
-                      label="Senha"
-                      error={
-                        formik.touched.Password &&
-                        Boolean(formik.errors.Password)
-                      }
-                      helperText={
-                        formik.touched.Password && formik.errors.Password
-                      }
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      type="password"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.ConfirmPassword}
-                      name="ConfirmPassword"
-                      placeholder="Confirmar senha"
-                      label="Confirmar senha"
-                      error={
-                        formik.touched.ConfirmPassword &&
-                        Boolean(formik.errors.ConfirmPassword)
-                      }
-                      helperText={
-                        formik.touched.ConfirmPassword &&
-                        formik.errors.ConfirmPassword
-                      }
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
                     <CustomTextField
                       name="IntegracaoId"
                       label="Integração Id"
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12} sm={6} lg={3}>
                     <FormControl variant="outlined" fullWidth>
                       <InputLabel id="select-label-sexo">Sexo</InputLabel>
                       <Select
@@ -264,7 +177,7 @@ const UsuarioForm = () => {
                         label="Sexo"
                         autoWidth
                       >
-                        <MenuItem value="NI">
+                        <MenuItem value="">
                           <em></em>
                         </MenuItem>
                         <MenuItem value="F">Feminino</MenuItem>
@@ -272,7 +185,7 @@ const UsuarioForm = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12} sm={6} lg={3}>
                     <FormControl
                       variant="outlined"
                       fullWidth

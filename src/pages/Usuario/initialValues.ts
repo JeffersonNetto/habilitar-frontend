@@ -10,7 +10,7 @@ const initialValues: RegisterUserViewModel = {
   DataNascimento: undefined,
   Nome: "",
   Sobrenome: "",
-  Sexo: "NI",
+  Sexo: "",
   IntegracaoId: "",
   Ip: "",
   Role: "",

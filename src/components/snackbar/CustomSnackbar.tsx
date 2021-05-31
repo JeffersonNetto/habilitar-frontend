@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export interface AlertMessage {
   severity: Color | undefined;
-  message: string | string[];
+  message: any;
 }
 
 interface CustomSnackbarProps {

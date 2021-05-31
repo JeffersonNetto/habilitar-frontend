@@ -1,25 +1,24 @@
-import React from "react";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import { Formik } from "formik";
 import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import { useLocation } from "react-router";
 import UnidadeService from "../../services/UnidadeService";
 import Unidade from "../../models/Unidade";
-import EmpresaService from "../../services/EmpresaService";
 import initialValues from "./initialValues";
 import validationSchema from "./validationSchema";
 import useStyles from "./useStyles";
 import CustomTextField from "../../components/textfield/CustomTextField";
 import EmpresaAutocomplete from "../../components/autocomplete/EmpresaAutocomplete";
+import CustomSnackbar, {
+  AlertMessage,
+} from "../../components/snackbar/CustomSnackbar";
 
 let stateUnidade: Unidade;
 
@@ -27,20 +26,16 @@ const UnidadeForm = () => {
   const classes = useStyles();
   const { Insert, Update } = UnidadeService();
   const [open, setOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<any>({
-    severity: "",
-    mensagem: "",
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    severity: undefined,
+    message: "",
   });
 
   const { pathname, state } = useLocation();
 
   if (pathname.includes("editar")) {
     stateUnidade = state as Unidade;
-    initialValues.Nome = stateUnidade.Nome;
-    initialValues.Telefone = stateUnidade.Telefone;
-    initialValues.Email = stateUnidade.Email;
-    initialValues.EmpresaId = stateUnidade.EmpresaId;
-    initialValues.Empresa = stateUnidade.Empresa;
+    Object.assign(initialValues, stateUnidade);
   } else if (pathname.includes("criar")) {
     initialValues.Nome = "";
     initialValues.Telefone = "";
@@ -48,14 +43,6 @@ const UnidadeForm = () => {
     initialValues.EmpresaId = 0;
     initialValues.Empresa = undefined;
   }
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   return (
     <div>
@@ -69,21 +56,25 @@ const UnidadeForm = () => {
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
             .then((response: CustomResponse<Unidade>) => {
-              console.log(response);
               setAlertMessage({
                 severity: "success",
-                mensagem: pathname.includes("editar")
+                message: pathname.includes("editar")
                   ? "Unidade alterada com sucesso"
                   : "Unidade inserida com sucesso",
               });
               setOpen(true);
             })
-            .catch((error: ErrorResponse) => {
-              console.log(error.Erros);
+            .catch((error: any) => {
+              let err: ErrorResponse = error.response.data;
               setAlertMessage({
                 severity: "error",
-                mensagem: error.Erros
-                  ? error.Erros.map((err) => <p>{err}</p>)
+                message: err.Erros
+                  ? err.Erros.map((err: string) => (
+                      <>
+                        {err}
+                        <br />
+                      </>
+                    ))
                   : "Sistema temporariamente indisponível",
               });
               setOpen(true);
@@ -97,20 +88,10 @@ const UnidadeForm = () => {
           <Container component="main" maxWidth="xl">
             <CssBaseline />
 
-            <Snackbar
-              open={open}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-              <Alert
-                onClose={handleClose}
-                severity={alertMessage.severity}
-                variant="filled"
-              >
-                <div style={{ fontSize: "1rem" }}>{alertMessage.mensagem}</div>
-              </Alert>
-            </Snackbar>
+            <CustomSnackbar
+              state={[open, setOpen]}
+              alertMessage={alertMessage}
+            />
 
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">

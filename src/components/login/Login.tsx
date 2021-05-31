@@ -83,7 +83,12 @@ const Login = () => {
         setAlertMessage({
           severity: "error",
           message: err.Erros
-            ? err.Erros.map((err) => err)
+            ? err.Erros.map((err: string) => (
+                <>
+                  {err}
+                  <br />
+                </>
+              ))
             : "Sistema temporariamente indisponível",
         });
         setOpen(true);

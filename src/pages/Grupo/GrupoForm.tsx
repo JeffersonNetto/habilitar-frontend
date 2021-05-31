@@ -6,31 +6,30 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Loader from "../../components/loader/Loader";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Context } from "../../context/AuthContext";
 import GetIp from "../../services/IpService";
 import GrupoService from "../../services/GrupoService";
 import useStyles from "./useStyles";
 import validationSchema from "./validationSchema";
 import initialValues from "./initialValues";
-import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import Grupo from "../../models/Grupo";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
 import CustomTextField from "../../components/textfield/CustomTextField";
+import CustomSnackbar, {
+  AlertMessage,
+} from "../../components/snackbar/CustomSnackbar";
 
 let stateGrupo: Grupo;
 
 const GrupoForm = () => {
   const classes = useStyles();
   const { Insert, Update } = GrupoService();
-  const { usuarioLogado } = useContext(Context);
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<any>({
-    severity: "",
-    mensagem: "",
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    severity: undefined,
+    message: "",
   });
 
   useEffect(() => {
@@ -41,20 +40,11 @@ const GrupoForm = () => {
 
   if (pathname.includes("editar")) {
     stateGrupo = state as Grupo;
-    initialValues.Id = stateGrupo.Id;
-    initialValues.Descricao = stateGrupo.Descricao;
+    Object.assign(initialValues, stateGrupo);
   } else if (pathname.includes("criar")) {
     initialValues.Id = 0;
     initialValues.Descricao = "";
   }
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   return (
     <div>
@@ -68,17 +58,23 @@ const GrupoForm = () => {
             .then((response: CustomResponse<Grupo>) => {
               setAlertMessage({
                 severity: "success",
-                mensagem: pathname.includes("editar")
+                message: pathname.includes("editar")
                   ? "Grupo alterado com sucesso"
                   : "Grupo inserido com sucesso",
               });
               setOpen(true);
             })
-            .catch((error: ErrorResponse) => {
+            .catch((error: any) => {
+              let err: ErrorResponse = error.response.data;
               setAlertMessage({
                 severity: "error",
-                mensagem: error.Erros
-                  ? error.Erros.map((err) => <p>{err}</p>)
+                message: err.Erros
+                  ? err.Erros.map((err: string) => (
+                      <>
+                        {err}
+                        <br />
+                      </>
+                    ))
                   : "Sistema temporariamente indisponível",
               });
               setOpen(true);
@@ -92,20 +88,10 @@ const GrupoForm = () => {
           <Container component="main" maxWidth="xl">
             <CssBaseline />
 
-            <Snackbar
-              open={open}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-              <Alert
-                onClose={handleClose}
-                severity={alertMessage.severity}
-                variant="filled"
-              >
-                <div style={{ fontSize: "1rem" }}>{alertMessage.mensagem}</div>
-              </Alert>
-            </Snackbar>
+            <CustomSnackbar
+              state={[open, setOpen]}
+              alertMessage={alertMessage}
+            />
 
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">

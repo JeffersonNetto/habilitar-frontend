@@ -19,18 +19,20 @@ import Alert from "@material-ui/lab/Alert";
 import Intervalo from "../../models/Intervalo";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
 import CustomTextField from "../../components/textfield/CustomTextField";
+import CustomSnackbar, {
+  AlertMessage,
+} from "../../components/snackbar/CustomSnackbar";
 
 let stateIntervalo: Intervalo;
 
 const IntervaloForm = () => {
   const classes = useStyles();
   const { Insert, Update } = IntervaloService();
-  const { usuarioLogado } = useContext(Context);
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<any>({
-    severity: "",
-    mensagem: "",
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    severity: undefined,
+    message: "",
   });
 
   useEffect(() => {
@@ -41,20 +43,11 @@ const IntervaloForm = () => {
 
   if (pathname.includes("editar")) {
     stateIntervalo = state as Intervalo;
-    initialValues.Id = stateIntervalo.Id;
-    initialValues.Descricao = stateIntervalo.Descricao;
+    Object.assign(initialValues, stateIntervalo);
   } else if (pathname.includes("criar")) {
     initialValues.Id = 0;
     initialValues.Descricao = "";
   }
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   return (
     <div>
@@ -68,17 +61,23 @@ const IntervaloForm = () => {
             .then((response: CustomResponse<Intervalo>) => {
               setAlertMessage({
                 severity: "success",
-                mensagem: pathname.includes("editar")
+                message: pathname.includes("editar")
                   ? "Intervalo alterado com sucesso"
                   : "Intervalo inserido com sucesso",
               });
               setOpen(true);
             })
-            .catch((error: ErrorResponse) => {
+            .catch((error: any) => {
+              let err: ErrorResponse = error.response.data;
               setAlertMessage({
                 severity: "error",
-                mensagem: error
-                  ? error.Erros.map((err) => <p>{err}</p>)
+                message: err.Erros
+                  ? err.Erros.map((err: string) => (
+                      <>
+                        {err}
+                        <br />
+                      </>
+                    ))
                   : "Sistema temporariamente indisponível",
               });
               setOpen(true);
@@ -92,20 +91,10 @@ const IntervaloForm = () => {
           <Container component="main" maxWidth="xl">
             <CssBaseline />
 
-            <Snackbar
-              open={open}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-              <Alert
-                onClose={handleClose}
-                severity={alertMessage.severity}
-                variant="filled"
-              >
-                <div style={{ fontSize: "1rem" }}>{alertMessage.mensagem}</div>
-              </Alert>
-            </Snackbar>
+            <CustomSnackbar
+              state={[open, setOpen]}
+              alertMessage={alertMessage}
+            />
 
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">
