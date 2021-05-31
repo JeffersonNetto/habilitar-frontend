@@ -4,13 +4,19 @@ import { useField } from "formik";
 interface CustomTextFieldProps {
   label: string;
   name: string;
+  type?: string;
 }
 
-const CustomTextField = ({ label, ...props }: CustomTextFieldProps) => {
+const CustomTextField = ({
+  type = "text",
+  label,
+  ...props
+}: CustomTextFieldProps) => {
   const [field, meta] = useField(props);
 
   return (
     <TextField
+      type={type}
       fullWidth
       variant="outlined"
       {...field}

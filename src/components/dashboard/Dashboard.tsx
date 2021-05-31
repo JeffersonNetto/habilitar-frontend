@@ -23,9 +23,10 @@ import { secondaryListItems } from "./secondaryListItems";
 import { useStyles } from "./useStyles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Link } from "react-router-dom";
+import MenuUsuario from "./MenuUsuario";
 
 function Dashboard() {
-  const { handleLogout, usuarioLogadoId } = useContext(Context);
+  const { handleLogout } = useContext(Context);
 
   const classes = useStyles();
 
@@ -76,16 +77,7 @@ function Dashboard() {
             </Badge>
           </IconButton>
 
-          <Link
-            to={`/app/usuarios/editar/${usuarioLogadoId}`}
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <Tooltip title="Meu perfil">
-              <IconButton color="inherit">
-                <AccountCircleIcon />
-              </IconButton>
-            </Tooltip>
-          </Link>
+          <MenuUsuario />
 
           <Tooltip title="Sair">
             <IconButton onClick={handleLogout} color="inherit">

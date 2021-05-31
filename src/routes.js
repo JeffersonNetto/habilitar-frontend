@@ -17,6 +17,7 @@ import Unidades from "./pages/Unidade/Unidades";
 import UnidadeForm from "./pages/Unidade/UnidadeForm";
 import GrupoForm from "./pages/Grupo/GrupoForm";
 import Grupos from "./pages/Grupo/Grupos";
+import AlterarSenha from "./pages/Usuario/AlterarSenha";
 
 export function Rotas() {
   return (
@@ -163,6 +164,12 @@ export function RotasInternas() {
         isPrivate={true}
         path="/app/grupos/editar/:id"
         component={GrupoForm}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/alterar-senha"
+        component={AlterarSenha}
       />
     </Switch>
   );
