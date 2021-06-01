@@ -34,10 +34,6 @@ export default function MenuUsuario() {
   };
 
   const handleClose = (event: React.MouseEvent<EventTarget>) => {
-    const innerText = (event.target as HTMLElement).innerText;
-
-    console.log(innerText);
-
     if (
       anchorRef.current &&
       anchorRef.current.contains(event.target as HTMLElement)
@@ -99,7 +95,7 @@ export default function MenuUsuario() {
                     onKeyDown={handleListKeyDown}
                   >
                     <Link
-                      to={`/app/usuarios/editar/${usuarioLogadoId}`}
+                      to={`/app/meu-perfil/${usuarioLogadoId}`}
                       style={{ color: "inherit", textDecoration: "none" }}
                     >
                       <MenuItem onClick={handleClose}>Perfil</MenuItem>

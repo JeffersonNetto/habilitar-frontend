@@ -23,7 +23,7 @@ const ServiceBase = <T>(url: string) => {
     }
   };
 
-  const Get = async (id: number) => {
+  const Get = async (id: number | string) => {
     try {
       const { data } = await api.get<CustomResponse<T>>(`${url}${id}`);
       return data;
@@ -41,7 +41,7 @@ const ServiceBase = <T>(url: string) => {
     }
   };
 
-  const Update = async (body: T, id?: number) => {
+  const Update = async (body: T, id?: number | string) => {
     try {
       const { data } = await api.put<CustomResponse<T>>(`${url}${id}`, body);
       return data;
@@ -50,7 +50,7 @@ const ServiceBase = <T>(url: string) => {
     }
   };
 
-  const Delete = async (id: number) => {
+  const Delete = async (id: number | string) => {
     try {
       const { data } = await api.delete<CustomResponse<T>>(`${url}${id}`);
       return data;

@@ -18,6 +18,7 @@ import UnidadeForm from "./pages/Unidade/UnidadeForm";
 import GrupoForm from "./pages/Grupo/GrupoForm";
 import Grupos from "./pages/Grupo/Grupos";
 import AlterarSenha from "./pages/Usuario/AlterarSenha";
+import MeuPerfilForm from "./pages/Usuario/MeuPerfilForm";
 
 export function Rotas() {
   return (
@@ -170,6 +171,12 @@ export function RotasInternas() {
         isPrivate={true}
         path="/app/alterar-senha"
         component={AlterarSenha}
+      />
+      <CustomRoute
+        exact
+        isPrivate={true}
+        path="/app/meu-perfil/:id"
+        component={MeuPerfilForm}
       />
     </Switch>
   );

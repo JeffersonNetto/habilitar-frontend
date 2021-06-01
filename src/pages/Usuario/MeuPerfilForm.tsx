@@ -6,8 +6,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Loader from "../../components/loader/Loader";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import GetIp from "../../services/IpService";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -24,14 +23,12 @@ import {
 import ptBR from "date-fns/locale/pt-BR";
 import DateFnsUtils from "@date-io/date-fns";
 import UsuarioService from "../../services/UsuarioService";
-import RegisterUserViewModel from "../../view-models/RegisterUserViewModel";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
 import { ErrorResponse } from "../../helpers/Retorno";
-
-let stateUser: RegisterUserViewModel;
+import { Context } from "../../context/AuthContext";
 
 function LimparInitialValues() {
   initialValues.Nome = "";
@@ -51,8 +48,8 @@ function LimparInitialValues() {
 const UsuarioForm = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
-  const { Insert, Update } = UsuarioService();
-  const { pathname, state } = useLocation();
+  const { usuarioLogadoId } = useContext(Context);
+  const { Update, Get } = UsuarioService();
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
     severity: undefined,
@@ -66,15 +63,28 @@ const UsuarioForm = () => {
 
     LimparInitialValues();
 
-    if (pathname.includes("editar")) {
-      stateUser = state as RegisterUserViewModel;
-
-      Object.assign(initialValues, stateUser);
-
-      setLoading(false);
-    } else if (pathname.includes("criar")) {
-      setLoading(false);
-    }
+    (async () => {
+      try {
+        const response = await Get(usuarioLogadoId);
+        Object.assign(initialValues, response.Dados);
+      } catch (error: any) {
+        let err: ErrorResponse = error.response.data;
+        setAlertMessage({
+          severity: "error",
+          message: err.Erros
+            ? err.Erros.map((err: string) => (
+                <>
+                  {err}
+                  <br />
+                </>
+              ))
+            : "Sistema temporariamente indisponível",
+        });
+        setOpen(true);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   return loading ? (
@@ -88,37 +98,31 @@ const UsuarioForm = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values, actions) => {
-          const Func = pathname.includes("editar") ? Update : Insert;
-
-          Func(values as any)
-            .then((response: any) => {
-              setAlertMessage({
-                severity: "success",
-                message: pathname.includes("editar")
-                  ? "Usuário alterado com sucesso"
-                  : "Usuário inserido com sucesso",
-              });
-              setOpen(true);
-            })
-            .catch((error: any) => {
-              let err: ErrorResponse = error.response.data;
-              setAlertMessage({
-                severity: "error",
-                message: err.Erros
-                  ? err.Erros.map((err: string) => (
-                      <>
-                        {err}
-                        <br />
-                      </>
-                    ))
-                  : "Sistema temporariamente indisponível",
-              });
-              setOpen(true);
-            })
-            .finally(() => {
-              actions.setSubmitting(false);
+        onSubmit={async (values, actions) => {
+          try {
+            await Update(values as any, usuarioLogadoId);
+            setAlertMessage({
+              severity: "success",
+              message: "Usuário alterado com sucesso",
             });
+            setOpen(true);
+          } catch (error) {
+            let err: ErrorResponse = error.response.data;
+            setAlertMessage({
+              severity: "error",
+              message: err.Erros
+                ? err.Erros.map((err: string) => (
+                    <>
+                      {err}
+                      <br />
+                    </>
+                  ))
+                : "Sistema temporariamente indisponível",
+            });
+            setOpen(true);
+          } finally {
+            actions.setSubmitting(false);
+          }
         }}
       >
         {(formik) => (

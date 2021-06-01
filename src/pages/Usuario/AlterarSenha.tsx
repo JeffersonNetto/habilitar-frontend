@@ -6,10 +6,8 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Loader from "../../components/loader/Loader";
-import { useEffect, useState } from "react";
-import GetIp from "../../services/IpService";
+import { useContext, useState } from "react";
 import useStyles from "./useStyles";
-import initialValues from "./initialValues";
 import CustomTextField from "../../components/textfield/CustomTextField";
 import UsuarioService from "../../services/UsuarioService";
 import CustomSnackbar, {
@@ -17,31 +15,29 @@ import CustomSnackbar, {
 } from "../../components/snackbar/CustomSnackbar";
 import { ErrorResponse } from "../../helpers/Retorno";
 import * as yup from "yup";
-import User from "../../models/User";
+import { Context } from "../../context/AuthContext";
+import AlterarSenhaViewModel from "../../view-models/AlterarSenhaViewModel";
+
+const initialValues: AlterarSenhaViewModel = {
+  SenhaAtual: "",
+  NovaSenha: "",
+  ConfirmarSenha: "",
+};
 
 const AlterarSenha = () => {
   const classes = useStyles();
-  const { Insert, Update } = UsuarioService();
+  const { AlterarSenha } = UsuarioService();
+  const { usuarioLogadoId } = useContext(Context);
   const [open, setOpen] = useState(false);
-  const [alertMessage] = useState<AlertMessage>({
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
     severity: undefined,
     message: "",
   });
 
-  useEffect(() => {
-    GetIp().then((response) => {
-      initialValues.Ip = response;
-    });
-  }, []);
-
   return (
     <div>
       <Formik
-        initialValues={{
-          SenhaAtual: "",
-          NovaSenha: "",
-          ConfirmarSenha: "",
-        }}
+        initialValues={initialValues}
         validationSchema={yup.object({
           SenhaAtual: yup.string().required("Informe sua senha atual"),
           NovaSenha: yup.string().required("Informa a nova senha"),
@@ -49,9 +45,28 @@ const AlterarSenha = () => {
         })}
         onSubmit={async (values, actions) => {
           try {
-            await Insert({} as User);
+            await AlterarSenha(values, usuarioLogadoId);
+            setAlertMessage({
+              severity: "success",
+              message: "Senha alterada com sucesso",
+            });
+            setOpen(true);
           } catch (error) {
-            console.log(error);
+            let err: ErrorResponse = error.response.data;
+            setAlertMessage({
+              severity: "error",
+              message: err.Erros
+                ? err.Erros.map((err: string) => (
+                    <>
+                      {err}
+                      <br />
+                    </>
+                  ))
+                : "Sistema temporariamente indisponível",
+            });
+            setOpen(true);
+          } finally {
+            actions.setSubmitting(false);
           }
         }}
       >
