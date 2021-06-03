@@ -24,15 +24,16 @@ import {
 import ptBR from "date-fns/locale/pt-BR";
 import DateFnsUtils from "@date-io/date-fns";
 import UsuarioService from "../../services/UsuarioService";
-import RegisterUserViewModel from "../../view-models/RegisterUserViewModel";
+import CreateUserViewModel from "../../view-models/CreateUserViewModel";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
 import { ErrorResponse } from "../../helpers/Retorno";
 import SupervisedUserCircleRounded from "@material-ui/icons/SupervisedUserCircleRounded";
+import { Card, CardMedia } from "@material-ui/core";
 
-let stateUser: RegisterUserViewModel;
+let stateUser: CreateUserViewModel;
 
 function LimparInitialValues() {
   initialValues.Nome = "";
@@ -68,7 +69,9 @@ const UsuarioForm = () => {
     LimparInitialValues();
 
     if (pathname.includes("editar")) {
-      stateUser = state as RegisterUserViewModel;
+      stateUser = state as CreateUserViewModel;
+
+      console.log(stateUser);
 
       Object.assign(initialValues, stateUser);
 
@@ -86,6 +89,20 @@ const UsuarioForm = () => {
     </>
   ) : (
     <div>
+      <Card
+        variant="outlined"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <CardMedia
+          image="/NEW_USER.png"
+          style={{ minHeight: "20rem", minWidth: "34rem" }}
+        ></CardMedia>
+      </Card>
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -123,135 +140,145 @@ const UsuarioForm = () => {
         }}
       >
         {(formik) => (
-          <Container component="main" maxWidth="xl">
-            <CssBaseline />
+          <Card variant="outlined">
+            <Container component="main" maxWidth="xl">
+              <CssBaseline />
 
-            <CustomSnackbar
-              state={[open, setOpen]}
-              alertMessage={alertMessage}
-            />
+              <CustomSnackbar
+                state={[open, setOpen]}
+                alertMessage={alertMessage}
+              />
 
-            <div className={classes.paper}>
-              <SupervisedUserCircleRounded color="inherit" />
-              <Typography component="h1" variant="h5">
-                Usuário
-              </Typography>
-              <Form className={classes.form}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="Nome" label="Nome" />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="Sobrenome" label="Sobrenome" />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="Cpf" label="CPF" />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <MuiPickersUtilsProvider locale={ptBR} utils={DateFnsUtils}>
-                      <KeyboardDatePicker
-                        fullWidth
-                        autoOk
-                        invalidDateMessage="A data informada é inválida"
-                        variant="inline"
-                        margin="none"
-                        name="DataNascimento"
-                        label="Data de nascimento"
-                        inputVariant="outlined"
-                        format="dd/MM/yyyy"
-                        value={formik.values.DataNascimento || null}
-                        onChange={(value) =>
-                          formik.setFieldValue("DataNascimento", value)
-                        }
+              <div className={classes.paper}>
+                <SupervisedUserCircleRounded color="inherit" />
+                <Typography component="h1" variant="h5">
+                  Usuário
+                </Typography>
+                <Form className={classes.form}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField name="Nome" label="Nome" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField name="Sobrenome" label="Sobrenome" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField name="Cpf" label="CPF" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <MuiPickersUtilsProvider
+                        locale={ptBR}
+                        utils={DateFnsUtils}
+                      >
+                        <KeyboardDatePicker
+                          fullWidth
+                          autoOk
+                          invalidDateMessage="A data informada é inválida"
+                          variant="inline"
+                          margin="none"
+                          name="DataNascimento"
+                          label="Data de nascimento"
+                          inputVariant="outlined"
+                          format="dd/MM/yyyy"
+                          value={formik.values.DataNascimento || null}
+                          onChange={(value) =>
+                            formik.setFieldValue("DataNascimento", value)
+                          }
+                        />
+                      </MuiPickersUtilsProvider>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField
+                        name="UserName"
+                        label="Nome de usuário"
                       />
-                    </MuiPickersUtilsProvider>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="UserName" label="Nome de usuário" />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="PhoneNumber" label="Telefone" />
-                  </Grid>
-                  <Grid item xs={12} sm={12}>
-                    <CustomTextField name="Email" label="E-mail" />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField
-                      name="IntegracaoId"
-                      label="Integração Id"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} lg={3}>
-                    <FormControl variant="outlined" fullWidth>
-                      <InputLabel id="select-label-sexo">Sexo</InputLabel>
-                      <Select
-                        labelId="select-label-sexo"
-                        id="select-sexo"
-                        value={formik.values.Sexo}
-                        name="Sexo"
-                        onChange={formik.handleChange}
-                        placeholder="Sexo"
-                        label="Sexo"
-                        autoWidth
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField name="PhoneNumber" label="Telefone" />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <CustomTextField name="Email" label="E-mail" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField
+                        name="IntegracaoId"
+                        label="Integração Id"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} lg={3}>
+                      <FormControl variant="outlined" fullWidth>
+                        <InputLabel id="select-label-sexo">Sexo</InputLabel>
+                        <Select
+                          labelId="select-label-sexo"
+                          id="select-sexo"
+                          value={formik.values.Sexo}
+                          name="Sexo"
+                          onChange={formik.handleChange}
+                          placeholder="Sexo"
+                          label="Sexo"
+                          autoWidth
+                        >
+                          <MenuItem value="">
+                            <em></em>
+                          </MenuItem>
+                          <MenuItem value="F">Feminino</MenuItem>
+                          <MenuItem value="M">Masculino</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6} lg={3}>
+                      <FormControl
+                        variant="outlined"
+                        fullWidth
+                        error={
+                          formik.touched.Role && Boolean(formik.errors.Role)
+                        }
                       >
-                        <MenuItem value="">
-                          <em></em>
-                        </MenuItem>
-                        <MenuItem value="F">Feminino</MenuItem>
-                        <MenuItem value="M">Masculino</MenuItem>
-                      </Select>
-                    </FormControl>
+                        <InputLabel id="select-label-perfil">Perfil</InputLabel>
+                        <Select
+                          labelId="select-label-perfil"
+                          id="select-perfil"
+                          value={formik.values.Role}
+                          name="Role"
+                          onChange={formik.handleChange}
+                          label="Perfil"
+                          autoWidth
+                          placeholder="Perfil"
+                        >
+                          <MenuItem value="">
+                            <em></em>
+                          </MenuItem>
+                          <MenuItem value="Admin">Admin</MenuItem>
+                          <MenuItem value="Auxiliar">Auxiliar</MenuItem>
+                          <MenuItem value="Fisioterapeuta">
+                            Fisioterapeuta
+                          </MenuItem>
+                          <MenuItem value="Paciente">Paciente</MenuItem>
+                        </Select>
+                        {formik.touched.Role && Boolean(formik.errors.Role) && (
+                          <FormHelperText>{formik.errors.Role}</FormHelperText>
+                        )}
+                      </FormControl>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={6} lg={3}>
-                    <FormControl
-                      variant="outlined"
-                      fullWidth
-                      error={formik.touched.Role && Boolean(formik.errors.Role)}
+                  <Box textAlign="center">
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      disabled={formik.isSubmitting}
+                      className={classes.submit}
                     >
-                      <InputLabel id="select-label-perfil">Perfil</InputLabel>
-                      <Select
-                        labelId="select-label-perfil"
-                        id="select-perfil"
-                        value={formik.values.Role}
-                        name="Role"
-                        onChange={formik.handleChange}
-                        label="Perfil"
-                        autoWidth
-                        placeholder="Perfil"
-                      >
-                        <MenuItem value="">
-                          <em></em>
-                        </MenuItem>
-                        <MenuItem value="Admin">Admin</MenuItem>
-                        <MenuItem value="Auxiliar">Auxiliar</MenuItem>
-                        <MenuItem value="Fisioterapeuta">
-                          Fisioterapeuta
-                        </MenuItem>
-                        <MenuItem value="Paciente">Paciente</MenuItem>
-                      </Select>
-                      {formik.touched.Role && Boolean(formik.errors.Role) && (
-                        <FormHelperText>{formik.errors.Role}</FormHelperText>
-                      )}
-                    </FormControl>
-                  </Grid>
-                </Grid>
-                <Box textAlign="center">
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={formik.isSubmitting}
-                    className={classes.submit}
-                  >
-                    Salvar
-                  </Button>
-                </Box>
-                <Box display="flex" justifyContent="center">
-                  <Loader loading={formik.isSubmitting}></Loader>
-                </Box>
-              </Form>
-            </div>
-          </Container>
+                      Salvar
+                    </Button>
+                  </Box>
+                  <Box display="flex" justifyContent="center">
+                    <Loader loading={formik.isSubmitting}></Loader>
+                  </Box>
+                </Form>
+              </div>
+            </Container>
+          </Card>
         )}
       </Formik>
     </div>

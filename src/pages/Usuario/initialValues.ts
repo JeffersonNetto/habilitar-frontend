@@ -1,8 +1,6 @@
-import RegisterUserViewModel from "../../view-models/RegisterUserViewModel";
+import CreateUserViewModel from "../../view-models/CreateUserViewModel";
 
-const initialValues: RegisterUserViewModel = {
-  Password: "",
-  ConfirmPassword: "",
+const initialValues: CreateUserViewModel = {
   Email: "",
   PhoneNumber: "",
   UserName: "",

@@ -21,6 +21,7 @@ import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
 import TransferWithinAStationRounded from "@material-ui/icons/TransferWithinAStationRounded";
+import { Card, CardMedia } from "@material-ui/core";
 
 let stateExercicio: Exercicio;
 
@@ -65,6 +66,20 @@ const ExercicioForm = () => {
 
   return (
     <div>
+      <Card
+        variant="outlined"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <CardMedia
+          image="/EXERCICIOS_2.png"
+          style={{ minHeight: "20rem", minWidth: "34rem" }}
+        ></CardMedia>
+      </Card>
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -111,51 +126,56 @@ const ExercicioForm = () => {
         }}
       >
         {(formik) => (
-          <Container component="main" maxWidth="xl">
-            <CssBaseline />
+          <Card variant="outlined">
+            <Container component="main" maxWidth="xl">
+              <CssBaseline />
 
-            <CustomSnackbar
-              state={[open, setOpen]}
-              alertMessage={alertMessage}
-            />
+              <CustomSnackbar
+                state={[open, setOpen]}
+                alertMessage={alertMessage}
+              />
 
-            <div className={classes.paper}>
-              <TransferWithinAStationRounded color="inherit" />
-              <Typography component="h1" variant="h5">
-                Exercício
-              </Typography>
-              <Form className={classes.form}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="Descricao" label="Descrição" />
+              <div className={classes.paper}>
+                <TransferWithinAStationRounded color="inherit" />
+                <Typography component="h1" variant="h5">
+                  Exercício
+                </Typography>
+                <Form className={classes.form}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField name="Descricao" label="Descrição" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField name="Nome" label="Nome" />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <CustomTextField
+                        name="NomePopular"
+                        label="Nome Popular"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <GrupoAutocomplete formik={formik} />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="Nome" label="Nome" />
-                  </Grid>
-                  <Grid item xs={12} sm={12}>
-                    <CustomTextField name="NomePopular" label="Nome Popular" />
-                  </Grid>
-                  <Grid item xs={12} sm={12}>
-                    <GrupoAutocomplete formik={formik} />
-                  </Grid>
-                </Grid>
-                <Box textAlign="center">
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={formik.isSubmitting}
-                    className={classes.submit}
-                  >
-                    Salvar
-                  </Button>
-                </Box>
-                <Box display="flex" justifyContent="center">
-                  <Loader loading={formik.isSubmitting}></Loader>
-                </Box>
-              </Form>
-            </div>
-          </Container>
+                  <Box textAlign="center">
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      disabled={formik.isSubmitting}
+                      className={classes.submit}
+                    >
+                      Salvar
+                    </Button>
+                  </Box>
+                  <Box display="flex" justifyContent="center">
+                    <Loader loading={formik.isSubmitting}></Loader>
+                  </Box>
+                </Form>
+              </div>
+            </Container>
+          </Card>
         )}
       </Formik>
     </div>

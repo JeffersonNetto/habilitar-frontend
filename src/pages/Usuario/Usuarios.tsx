@@ -7,6 +7,7 @@ import localization from "../../helpers/material-table-localization";
 import UsuarioService from "../../services/UsuarioService";
 import { format } from "date-fns";
 import User from "../../models/User";
+import { Card, CardMedia } from "@material-ui/core";
 
 const Usuarios = () => {
   const history = useHistory();
@@ -45,34 +46,50 @@ const Usuarios = () => {
   }, []);
 
   return usuarios && usuarios.length > 0 ? (
-    <MaterialTable
-      title="Usuários"
-      data={usuarios}
-      columns={columns}
-      localization={localization}
-      options={{
-        search: true,
-        sorting: true,
-        paging: true,
-        exportButton: true,
-      }}
-      actions={[
-        {
-          icon: "add",
-          tooltip: "Adicionar usuário",
-          isFreeAction: true,
-          onClick: (event) => history.push("/app/usuarios/criar"),
-        },
-        {
-          icon: "edit",
-          tooltip: "Editar",
-          onClick: (event, rowData) => {
-            const usuario = rowData as User;
-            history.push(`/app/usuarios/editar/${usuario.Id}`, usuario);
+    <div>
+      <Card
+        variant="outlined"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <CardMedia
+          image="/NEW_USER.png"
+          style={{ minHeight: "20rem", minWidth: "34rem" }}
+        ></CardMedia>
+      </Card>
+
+      <MaterialTable
+        title="Usuários"
+        data={usuarios}
+        columns={columns}
+        localization={localization}
+        options={{
+          search: true,
+          sorting: true,
+          paging: true,
+          exportButton: true,
+        }}
+        actions={[
+          {
+            icon: "add",
+            tooltip: "Adicionar usuário",
+            isFreeAction: true,
+            onClick: (event) => history.push("/app/usuarios/criar"),
           },
-        },
-      ]}
-    />
+          {
+            icon: "edit",
+            tooltip: "Editar",
+            onClick: (event, rowData) => {
+              const usuario = rowData as User;
+              history.push(`/app/usuarios/editar/${usuario.Id}`, usuario);
+            },
+          },
+        ]}
+      />
+    </div>
   ) : (
     <div>
       <h2>Carregando usuários...</h2>

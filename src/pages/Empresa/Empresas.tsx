@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
 import Empresa from "../../models/Empresa";
 import EmpresaService from "../../services/EmpresaService";
+import { Card, CardMedia } from "@material-ui/core";
 
 const Empresas = () => {
   const history = useHistory();
@@ -74,6 +75,21 @@ const Empresas = () => {
         descricao="Confirma a exclusão do empresa "
         nome={empresaExcluir?.NomeFantasia}
       />
+
+      <Card
+        variant="outlined"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <CardMedia
+          image="/EMPRESA.png"
+          style={{ minHeight: "20rem", minWidth: "50rem" }}
+        ></CardMedia>
+      </Card>
+
       <MaterialTable
         title="Empresas"
         data={empresas}

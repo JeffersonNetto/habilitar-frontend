@@ -1,4 +1,4 @@
-import RegisterUserViewModel from "../view-models/RegisterUserViewModel";
+import CreateUserViewModel from "../view-models/CreateUserViewModel";
 import api from "../interceptor/http-interceptor";
 import { CustomResponse } from "../helpers/Retorno";
 import LoginResponseViewModel from "../view-models/LoginResponseViewModel";
@@ -6,7 +6,7 @@ import LoginResponseViewModel from "../view-models/LoginResponseViewModel";
 const url = "auth/";
 
 const AuthService = {
-  Registrar: async (payload: RegisterUserViewModel) => {
+  Registrar: async (payload: CreateUserViewModel) => {
     try {
       const { data } = await api.post<CustomResponse<LoginResponseViewModel>>(
         `${url}registrar`,

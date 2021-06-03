@@ -1,7 +1,5 @@
-export default interface RegisterUserViewModel {
+export default interface CreateUserViewModel {
   Email: string;
-  Password: string;
-  ConfirmPassword: string;
   UserName: string;
   PhoneNumber: string;
   Cpf: string;

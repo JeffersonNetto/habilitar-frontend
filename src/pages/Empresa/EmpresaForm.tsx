@@ -20,6 +20,7 @@ import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
 import BusinessRounded from "@material-ui/icons/BusinessRounded";
+import { Card, CardMedia } from "@material-ui/core";
 
 let stateEmpresa: Empresa;
 
@@ -52,6 +53,20 @@ const EmpresaForm = () => {
 
   return (
     <div>
+      <Card
+        variant="outlined"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <CardMedia
+          image="/EMPRESA.png"
+          style={{ minHeight: "20rem", minWidth: "50rem" }}
+        ></CardMedia>
+      </Card>
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -90,51 +105,54 @@ const EmpresaForm = () => {
         }}
       >
         {(formik) => (
-          <Container component="main" maxWidth="xl">
-            <CssBaseline />
-
-            <CustomSnackbar
-              alertMessage={alertMessage}
-              state={[open, setOpen]}
-            />
-
-            <div className={classes.paper}>
-              <BusinessRounded color="inherit" />
-              <Typography component="h1" variant="h5">
-                Empresa
-              </Typography>
-              <Form className={classes.form}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField
-                      name="NomeFantasia"
-                      label="Nome Fantasia"
-                    />
+          <Card variant="outlined">
+            <Container component="main" maxWidth="xl">
+              <CssBaseline />
+              <CustomSnackbar
+                alertMessage={alertMessage}
+                state={[open, setOpen]}
+              />
+              <div className={classes.paper}>
+                <BusinessRounded color="inherit" />
+                <Typography component="h1" variant="h5">
+                  Empresa
+                </Typography>
+                <Form className={classes.form}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField
+                        name="NomeFantasia"
+                        label="Nome Fantasia"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField
+                        name="RazaoSocial"
+                        label="Razão Social"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <CustomTextField name="Cnpj" label="CNPJ" />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="RazaoSocial" label="Razão Social" />
-                  </Grid>
-                  <Grid item xs={12} sm={12}>
-                    <CustomTextField name="Cnpj" label="CNPJ" />
-                  </Grid>
-                </Grid>
-                <Box textAlign="center">
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={formik.isSubmitting}
-                    className={classes.submit}
-                  >
-                    Salvar
-                  </Button>
-                </Box>
-                <Box display="flex" justifyContent="center">
-                  <Loader loading={formik.isSubmitting}></Loader>
-                </Box>
-              </Form>
-            </div>
-          </Container>
+                  <Box textAlign="center">
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      disabled={formik.isSubmitting}
+                      className={classes.submit}
+                    >
+                      Salvar
+                    </Button>
+                  </Box>
+                  <Box display="flex" justifyContent="center">
+                    <Loader loading={formik.isSubmitting}></Loader>
+                  </Box>
+                </Form>
+              </div>{" "}
+            </Container>
+          </Card>
         )}
       </Formik>
     </div>

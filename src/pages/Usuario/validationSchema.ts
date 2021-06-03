@@ -7,8 +7,6 @@ const validationSchema = yup.object({
     .string()
     .required("Informe seu e-mail")
     .email("Informe um e-mail válido"),
-  Password: yup.string().required("Informe sua senha"),
-  ConfirmPassword: yup.string().required("Confirme sua senha"),
   Nome: yup.string().required("Informe seu nome"),
   Sobrenome: yup.string().required("Informe seu sobrenome"),
   Cpf: yup.string().required("Informe seu CPF"),

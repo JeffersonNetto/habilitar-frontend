@@ -7,6 +7,7 @@ import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
 import { useHistory } from "react-router";
 import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
+import { Card, CardMedia } from "@material-ui/core";
 
 const Exercicios = () => {
   const history = useHistory();
@@ -75,6 +76,21 @@ const Exercicios = () => {
         descricao="Confirma a exclusão do exercício "
         nome={exercicioExcluir?.Nome}
       />
+
+      <Card
+        variant="outlined"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <CardMedia
+          image="/EXERCICIOS_2.png"
+          style={{ minHeight: "20rem", minWidth: "34rem" }}
+        ></CardMedia>
+      </Card>
+
       <MaterialTable
         title="Exercícios"
         data={exercicios}
