@@ -19,6 +19,7 @@ import CustomTextField from "../../components/textfield/CustomTextField";
 import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
+import GroupWorkRounded from "@material-ui/icons/GroupWorkRounded";
 
 let stateGrupo: Grupo;
 
@@ -94,6 +95,7 @@ const GrupoForm = () => {
             />
 
             <div className={classes.paper}>
+              <GroupWorkRounded color="inherit" />
               <Typography component="h1" variant="h5">
                 Grupo
               </Typography>

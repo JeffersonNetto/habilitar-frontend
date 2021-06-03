@@ -1,12 +1,14 @@
 import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import PeopleIcon from "@material-ui/icons/People";
-import BarChartIcon from "@material-ui/icons/BarChart";
-import LayersIcon from "@material-ui/icons/Layers";
 import { useContext } from "react";
 import { Context } from "../../context/AuthContext";
+import SupervisedUserCircleRounded from "@material-ui/icons/SupervisedUserCircleRounded";
+import TransferWithinAStationRounded from "@material-ui/icons/TransferWithinAStationRounded";
+import Timeline from "@material-ui/icons/Timeline";
+import DateRangeRounded from "@material-ui/icons/DateRangeRounded";
+import BusinessRounded from "@material-ui/icons/BusinessRounded";
+import GroupWorkRounded from "@material-ui/icons/GroupWorkRounded";
+import HomeWorkRounded from "@material-ui/icons/HomeWorkRounded";
 
 export const MainListItems = () => {
   const { role } = useContext(Context);
@@ -20,7 +22,7 @@ export const MainListItems = () => {
             style={{ color: "inherit", textDecoration: "none" }}
           >
             <ListItemIcon>
-              <DashboardIcon />
+              <SupervisedUserCircleRounded />
             </ListItemIcon>
           </Link>
           <Link
@@ -38,7 +40,7 @@ export const MainListItems = () => {
           style={{ color: "inherit", textDecoration: "none" }}
         >
           <ListItemIcon>
-            <ShoppingCartIcon />
+            <TransferWithinAStationRounded />
           </ListItemIcon>
         </Link>
         <Link
@@ -55,7 +57,7 @@ export const MainListItems = () => {
           style={{ color: "inherit", textDecoration: "none" }}
         >
           <ListItemIcon>
-            <PeopleIcon />
+            <Timeline />
           </ListItemIcon>
         </Link>
         <Link
@@ -72,7 +74,7 @@ export const MainListItems = () => {
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <ListItemIcon>
-            <BarChartIcon />
+            <DateRangeRounded />
           </ListItemIcon>
         </Link>
         <Link
@@ -89,7 +91,7 @@ export const MainListItems = () => {
           style={{ color: "inherit", textDecoration: "none" }}
         >
           <ListItemIcon>
-            <LayersIcon />
+            <BusinessRounded />
           </ListItemIcon>
         </Link>
         <Link
@@ -106,7 +108,7 @@ export const MainListItems = () => {
           style={{ color: "inherit", textDecoration: "none" }}
         >
           <ListItemIcon>
-            <LayersIcon />
+            <HomeWorkRounded />
           </ListItemIcon>
         </Link>
         <Link
@@ -123,7 +125,7 @@ export const MainListItems = () => {
           style={{ color: "inherit", textDecoration: "none" }}
         >
           <ListItemIcon>
-            <LayersIcon />
+            <GroupWorkRounded />
           </ListItemIcon>
         </Link>
         <Link

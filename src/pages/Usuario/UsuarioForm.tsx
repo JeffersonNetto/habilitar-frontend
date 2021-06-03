@@ -30,6 +30,7 @@ import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
 import { ErrorResponse } from "../../helpers/Retorno";
+import SupervisedUserCircleRounded from "@material-ui/icons/SupervisedUserCircleRounded";
 
 let stateUser: RegisterUserViewModel;
 
@@ -131,6 +132,7 @@ const UsuarioForm = () => {
             />
 
             <div className={classes.paper}>
+              <SupervisedUserCircleRounded color="inherit" />
               <Typography component="h1" variant="h5">
                 Usuário
               </Typography>

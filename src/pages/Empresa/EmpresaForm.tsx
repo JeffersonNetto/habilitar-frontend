@@ -6,22 +6,20 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Loader from "../../components/loader/Loader";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Context } from "../../context/AuthContext";
 import GetIp from "../../services/IpService";
 import EmpresaService from "../../services/EmpresaService";
 import useStyles from "./useStyles";
 import validationSchema from "./validationSchema";
 import initialValues from "./initialValues";
-import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import Empresa from "../../models/Empresa";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
 import CustomTextField from "../../components/textfield/CustomTextField";
 import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
+import BusinessRounded from "@material-ui/icons/BusinessRounded";
 
 let stateEmpresa: Empresa;
 
@@ -101,6 +99,7 @@ const EmpresaForm = () => {
             />
 
             <div className={classes.paper}>
+              <BusinessRounded color="inherit" />
               <Typography component="h1" variant="h5">
                 Empresa
               </Typography>

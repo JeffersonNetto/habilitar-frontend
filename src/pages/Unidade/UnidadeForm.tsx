@@ -19,6 +19,7 @@ import EmpresaAutocomplete from "../../components/autocomplete/EmpresaAutocomple
 import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
+import HomeWorkRounded from "@material-ui/icons/HomeWorkRounded";
 
 let stateUnidade: Unidade;
 
@@ -94,6 +95,7 @@ const UnidadeForm = () => {
             />
 
             <div className={classes.paper}>
+              <HomeWorkRounded color="inherit" />
               <Typography component="h1" variant="h5">
                 Unidade
               </Typography>

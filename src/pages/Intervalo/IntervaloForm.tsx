@@ -6,22 +6,20 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Loader from "../../components/loader/Loader";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Context } from "../../context/AuthContext";
 import GetIp from "../../services/IpService";
 import IntervaloService from "../../services/IntervaloService";
 import useStyles from "./useStyles";
 import validationSchema from "./validationSchema";
 import initialValues from "./initialValues";
-import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import Intervalo from "../../models/Intervalo";
 import { CustomResponse, ErrorResponse } from "../../helpers/Retorno";
 import CustomTextField from "../../components/textfield/CustomTextField";
 import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
+import DateRangeRounded from "@material-ui/icons/DateRangeRounded";
 
 let stateIntervalo: Intervalo;
 
@@ -97,6 +95,7 @@ const IntervaloForm = () => {
             />
 
             <div className={classes.paper}>
+              <DateRangeRounded color="inherit" />
               <Typography component="h1" variant="h5">
                 Intervalo
               </Typography>

@@ -14,15 +14,13 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { useContext, useState } from "react";
 import { Context } from "../../context/AuthContext";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withRouter } from "react-router-dom";
 import { RotasInternas } from "../../routes";
 import { MainListItems } from "./mainListItems";
 import { secondaryListItems } from "./secondaryListItems";
 import { useStyles } from "./useStyles";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { Link } from "react-router-dom";
 import MenuUsuario from "./MenuUsuario";
 
 function Dashboard() {
@@ -81,7 +79,7 @@ function Dashboard() {
 
           <Tooltip title="Sair">
             <IconButton onClick={handleLogout} color="inherit">
-              <ExitToAppIcon />
+              <ExitToAppRoundedIcon />
             </IconButton>
           </Tooltip>
         </Toolbar>

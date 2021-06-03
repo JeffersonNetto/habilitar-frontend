@@ -29,6 +29,7 @@ import CustomSnackbar, {
 } from "../../components/snackbar/CustomSnackbar";
 import { ErrorResponse } from "../../helpers/Retorno";
 import { Context } from "../../context/AuthContext";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 function LimparInitialValues() {
   initialValues.Nome = "";
@@ -135,8 +136,9 @@ const UsuarioForm = () => {
             />
 
             <div className={classes.paper}>
+              <AccountCircleIcon color="inherit" />
               <Typography component="h1" variant="h5">
-                Usuário
+                Meu Perfil
               </Typography>
               <Form className={classes.form}>
                 <Grid container spacing={2}>
