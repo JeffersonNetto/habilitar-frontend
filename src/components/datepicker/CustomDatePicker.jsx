@@ -1,44 +1,42 @@
-import Utils from '@date-io/date-fns'
-import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
-import DatePicker from "material-ui-pickers/DatePicker";
 import ptBR from "date-fns/locale/pt-BR";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import { useField } from 'formik';
 
-const CustomDatePicker = ({
-    name,
-    form: { setFieldValue },
-    field: { value },
-    ...rest
-  }) => {
-    // console.log(rest);
-    return (
-      <MuiPickersUtilsProvider locale={ptBR} utils={Utils}>
-        <DatePicker
-          fullWidth
-          variant="outlined"
-          margin="none"
-          name={name}
-          keyboard
-          clearable
-          autoOk
-          label="Data de nascimento"
-          format="dd/MM/yyyy"
-          placeholder="dd/mm/aaaa"
-          // handle clearing outside => pass plain array if you are not controlling value outside
-          // mask={(value) =>
-          //   value
-          //     ? [/[0-3]/, /\d/, "/", /0|1/, /\d/, "/", /1|2/, /\d/, /\d/, /\d/]
-          //     : []
-          // }
-          disableOpenOnEnter
-          onChange={(value) => {
-            console.log("setting value to", value);
-            setFieldValue("date", value);
-          }}
-          value={value}
-          animateYearScrolling={false}
-      />
-      </MuiPickersUtilsProvider>      
-    );
-  };
+const CustomDatePicker = ({label, ...props}) => {
+  const [field, meta, helpers] = useField(props);
 
-  export default CustomDatePicker;
+  return (
+    <MuiPickersUtilsProvider
+    locale={ptBR}
+    utils={DateFnsUtils}
+  >
+    <KeyboardDatePicker    
+      {...field}
+      fullWidth
+      autoOk      
+      invalidDateMessage="A data informada é inválida"
+      variant="inline"
+      margin="none"      
+      label={label}
+      inputVariant="outlined"
+      format="dd/MM/yyyy"
+      value={field.value || null}
+      onChange={(value) => helpers.setValue(value)}
+      error={
+        meta.touched &&
+        Boolean(meta.error)
+      }
+      helperText={
+        meta.touched &&
+        meta.error
+      }
+    />
+  </MuiPickersUtilsProvider>
+  )
+}
+
+export default CustomDatePicker;

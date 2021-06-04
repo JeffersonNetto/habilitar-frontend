@@ -9,29 +9,20 @@ import Loader from "../../components/loader/Loader";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import GetIp from "../../services/IpService";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import useStyles from "./useStyles";
 import validationSchema from "./validationSchema";
 import initialValues from "./initialValues";
 import CustomTextField from "../../components/textfield/CustomTextField";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import ptBR from "date-fns/locale/pt-BR";
-import DateFnsUtils from "@date-io/date-fns";
 import UsuarioService from "../../services/UsuarioService";
 import CreateUserViewModel from "../../view-models/CreateUserViewModel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import CustomSnackbar, {
   AlertMessage,
 } from "../../components/snackbar/CustomSnackbar";
 import { ErrorResponse } from "../../helpers/Retorno";
 import SupervisedUserCircleRounded from "@material-ui/icons/SupervisedUserCircleRounded";
 import { Card, CardMedia } from "@material-ui/core";
+import CustomSelect from "../../components/select/CustomSelect";
+import CustomDatePicker from "../../components/datepicker/CustomDatePicker";
 
 let stateUser: CreateUserViewModel;
 
@@ -166,26 +157,10 @@ const UsuarioForm = () => {
                       <CustomTextField name="Cpf" label="CPF" />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <MuiPickersUtilsProvider
-                        locale={ptBR}
-                        utils={DateFnsUtils}
-                      >
-                        <KeyboardDatePicker
-                          fullWidth
-                          autoOk
-                          invalidDateMessage="A data informada é inválida"
-                          variant="inline"
-                          margin="none"
-                          name="DataNascimento"
-                          label="Data de nascimento"
-                          inputVariant="outlined"
-                          format="dd/MM/yyyy"
-                          value={formik.values.DataNascimento || null}
-                          onChange={(value) =>
-                            formik.setFieldValue("DataNascimento", value)
-                          }
-                        />
-                      </MuiPickersUtilsProvider>
+                      <CustomDatePicker
+                        label="Data de nascimento"
+                        name="DataNascimento"
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <CustomTextField
@@ -206,59 +181,23 @@ const UsuarioForm = () => {
                       />
                     </Grid>
                     <Grid item xs={12} sm={6} lg={3}>
-                      <FormControl variant="outlined" fullWidth>
-                        <InputLabel id="select-label-sexo">Sexo</InputLabel>
-                        <Select
-                          labelId="select-label-sexo"
-                          id="select-sexo"
-                          value={formik.values.Sexo}
-                          name="Sexo"
-                          onChange={formik.handleChange}
-                          placeholder="Sexo"
-                          label="Sexo"
-                          autoWidth
-                        >
-                          <MenuItem value="">
-                            <em></em>
-                          </MenuItem>
-                          <MenuItem value="F">Feminino</MenuItem>
-                          <MenuItem value="M">Masculino</MenuItem>
-                        </Select>
-                      </FormControl>
+                      <CustomSelect
+                        name="Sexo"
+                        label="Sexo"
+                        options={["Feminino", "Masculino"]}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={6} lg={3}>
-                      <FormControl
-                        variant="outlined"
-                        fullWidth
-                        error={
-                          formik.touched.Role && Boolean(formik.errors.Role)
-                        }
-                      >
-                        <InputLabel id="select-label-perfil">Perfil</InputLabel>
-                        <Select
-                          labelId="select-label-perfil"
-                          id="select-perfil"
-                          value={formik.values.Role}
-                          name="Role"
-                          onChange={formik.handleChange}
-                          label="Perfil"
-                          autoWidth
-                          placeholder="Perfil"
-                        >
-                          <MenuItem value="">
-                            <em></em>
-                          </MenuItem>
-                          <MenuItem value="Admin">Admin</MenuItem>
-                          <MenuItem value="Auxiliar">Auxiliar</MenuItem>
-                          <MenuItem value="Fisioterapeuta">
-                            Fisioterapeuta
-                          </MenuItem>
-                          <MenuItem value="Paciente">Paciente</MenuItem>
-                        </Select>
-                        {formik.touched.Role && Boolean(formik.errors.Role) && (
-                          <FormHelperText>{formik.errors.Role}</FormHelperText>
-                        )}
-                      </FormControl>
+                      <CustomSelect
+                        label="Perfil"
+                        name="Role"
+                        options={[
+                          "Admin",
+                          "Auxiliar",
+                          "Fisioterapeuta",
+                          "Paciente",
+                        ]}
+                      />
                     </Grid>
                   </Grid>
                   <Box textAlign="center">
