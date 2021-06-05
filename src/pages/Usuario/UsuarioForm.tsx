@@ -61,12 +61,14 @@ const UsuarioForm = () => {
 
     if (pathname.includes("editar")) {
       stateUser = state as CreateUserViewModel;
-
-      console.log(stateUser);
-
       Object.assign(initialValues, stateUser);
 
-      setLoading(false);
+      UsuarioService()
+        .ObterPerfil(initialValues.Id as string)
+        .then((response) => {
+          initialValues.Role = response;
+        })
+        .finally(() => setLoading(false));
     } else if (pathname.includes("criar")) {
       setLoading(false);
     }
@@ -97,37 +99,36 @@ const UsuarioForm = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
           const Func = pathname.includes("editar") ? Update : Insert;
 
-          Func(values as any)
-            .then((response: any) => {
-              setAlertMessage({
-                severity: "success",
-                message: pathname.includes("editar")
-                  ? "Usuário alterado com sucesso"
-                  : "Usuário inserido com sucesso",
-              });
-              setOpen(true);
-            })
-            .catch((error: any) => {
-              let err: ErrorResponse = error.response.data;
-              setAlertMessage({
-                severity: "error",
-                message: err.Erros
-                  ? err.Erros.map((err: string) => (
-                      <>
-                        {err}
-                        <br />
-                      </>
-                    ))
-                  : "Sistema temporariamente indisponível",
-              });
-              setOpen(true);
-            })
-            .finally(() => {
-              actions.setSubmitting(false);
+          try {
+            await Func(values as any, initialValues.Id);
+
+            setAlertMessage({
+              severity: "success",
+              message: pathname.includes("editar")
+                ? "Usuário alterado com sucesso"
+                : "Usuário inserido com sucesso",
             });
+            setOpen(true);
+          } catch (error) {
+            let err: ErrorResponse = error.response.data;
+            setAlertMessage({
+              severity: "error",
+              message: err.Erros
+                ? err.Erros.map((err: string) => (
+                    <>
+                      {err}
+                      <br />
+                    </>
+                  ))
+                : "Sistema temporariamente indisponível",
+            });
+            setOpen(true);
+          } finally {
+            actions.setSubmitting(false);
+          }
         }}
       >
         {(formik) => (
@@ -184,7 +185,10 @@ const UsuarioForm = () => {
                       <CustomSelect
                         name="Sexo"
                         label="Sexo"
-                        options={["Feminino", "Masculino"]}
+                        options={[
+                          { value: "F", text: "Feminino" },
+                          { value: "M", text: "Masculino" },
+                        ]}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6} lg={3}>
@@ -192,10 +196,10 @@ const UsuarioForm = () => {
                         label="Perfil"
                         name="Role"
                         options={[
-                          "Admin",
-                          "Auxiliar",
-                          "Fisioterapeuta",
-                          "Paciente",
+                          { value: "Admin", text: "Admin" },
+                          { value: "Auxiliar", text: "Auxiliar" },
+                          { value: "Fisioterapeuta", text: "Fisioterapeuta" },
+                          { value: "Paciente", text: "Paciente" },
                         ]}
                       />
                     </Grid>

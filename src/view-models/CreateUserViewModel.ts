@@ -10,4 +10,5 @@ export default interface CreateUserViewModel {
   IntegracaoId: string;
   Ip: string;
   Role: string;
+  Id?: string;
 }

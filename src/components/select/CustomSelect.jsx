@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { useField } from "formik";
 
-const CustomSelect = ({label, options, ...props}) => {
+const CustomSelect = ({label, options, userId = null, ...props}) => {
   const [field, meta] = useField(props);
 
   return (
@@ -23,13 +23,13 @@ const CustomSelect = ({label, options, ...props}) => {
         id={`select-${label}`}
         autoWidth
         label={label}
-        placeholder={label}
+        placeholder={label}                           
       >
         <MenuItem value="">
           <em></em>
         </MenuItem>
-        {
-          options.map(option => <MenuItem value={option}>{option}</MenuItem>)
+        {          
+          options.map(option => <MenuItem value={option.value}>{option.text}</MenuItem>)                            
         }
         {/* <MenuItem value="Admin">Admin</MenuItem>
         <MenuItem value="Auxiliar">Auxiliar</MenuItem>

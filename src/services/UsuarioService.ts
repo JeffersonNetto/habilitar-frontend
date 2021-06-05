@@ -17,7 +17,16 @@ const UsuarioService = () => {
     }
   };
 
-  return { GetAll, Insert, Update, AlterarSenha, Get };
+  const ObterPerfil = async (id: string) => {
+    try {
+      const { data } = await api.get(`${url}perfil/${id}`);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return { GetAll, Insert, Update, AlterarSenha, Get, ObterPerfil };
 };
 
 export default UsuarioService;
