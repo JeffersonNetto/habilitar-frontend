@@ -3,13 +3,13 @@ import api from "../interceptor/http-interceptor";
 import { CustomResponse } from "../helpers/Retorno";
 import LoginResponseViewModel from "../view-models/LoginResponseViewModel";
 
-const url = "auth/";
+const url = "/auth";
 
 const AuthService = {
   Registrar: async (payload: CreateUserViewModel) => {
     try {
       const { data } = await api.post<CustomResponse<LoginResponseViewModel>>(
-        `${url}registrar`,
+        `${url}/registrar`,
         payload
       );
       return data;

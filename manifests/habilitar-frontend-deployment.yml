@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: habilitar-frontend
+  labels:
+    app: habilitar-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: habilitar-frontend
+  template:
+    metadata:
+      labels:
+        app: habilitar-frontend
+    spec:
+      containers:
+        - name: habilitar-frontend
+          image: jeffersonneto/habilitar-frontend
+          ports:
+            - name: http
+              containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: habilitar-frontend-env

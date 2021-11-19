@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
 import Intervalo from "../../models/Intervalo";
 import IntervaloService from "../../services/IntervaloService";
 
 const Intervalos = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [intervalos, setIntervalos] = useState<Intervalo[] | undefined>();
-  const { GetAll, Delete } = IntervaloService();
   const [open, setOpen] = useState(false);
   const [intervaloExcluir, setIntervaloExcluir] = useState<
     Intervalo | undefined
@@ -37,7 +36,7 @@ const Intervalos = () => {
   };
 
   useEffect(() => {
-    GetAll()
+    IntervaloService.GetAll()
       .then((response: CustomResponse<Intervalo[]>) => {
         setIntervalos(response.Dados);
       })
@@ -83,14 +82,16 @@ const Intervalos = () => {
             icon: "add",
             tooltip: "Adicionar intervalo",
             isFreeAction: true,
-            onClick: (event) => history.push("/app/intervalos/criar"),
+            onClick: (event) => navigate("/app/intervalos/criar"),
           },
           {
             icon: "edit",
             tooltip: "Editar",
             onClick: (event, rowData) => {
               const intervalo = rowData as Intervalo;
-              history.push(`/app/intervalos/editar/${intervalo.Id}`, intervalo);
+              navigate(`/app/intervalos/editar/${intervalo.Id}`, {
+                state: intervalo,
+              });
             },
           },
           (rowData) => ({

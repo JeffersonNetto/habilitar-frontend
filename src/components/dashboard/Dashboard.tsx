@@ -16,12 +16,11 @@ import { useContext, useState } from "react";
 import { Context } from "../../context/AuthContext";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import Tooltip from "@material-ui/core/Tooltip";
-import { withRouter } from "react-router-dom";
-import { RotasInternas } from "../../routes";
 import { MainListItems } from "./mainListItems";
 import { secondaryListItems } from "./secondaryListItems";
 import { useStyles } from "./useStyles";
 import MenuUsuario from "./MenuUsuario";
+import { Outlet } from "react-router";
 
 function Dashboard() {
   const { handleLogout } = useContext(Context);
@@ -105,11 +104,11 @@ function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="xl" className={classes.container}>
-          <RotasInternas />
+          <Outlet />
         </Container>
       </main>
     </div>
   );
 }
 
-export default withRouter(Dashboard);
+export default Dashboard;

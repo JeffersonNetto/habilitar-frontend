@@ -15,7 +15,7 @@ interface Jwt {
   sub: string;
 }
 
-const url = "auth/entrar";
+const url = "/auth/entrar";
 
 export default function LoginService() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -26,8 +26,8 @@ export default function LoginService() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (token) {
-      api.defaults.headers.Authorization = `Bearer ${token}`;
+    if (token) {      
+      api.defaults.headers.common = {'Authorization': `Bearer ${token}`}
       setAuthenticated(true);
 
       const jwt: Jwt = jwt_decode(token);
@@ -54,7 +54,8 @@ export default function LoginService() {
 
       if (data.Dados.AccessToken) {
         localStorage.setItem("token", data.Dados.AccessToken);
-        api.defaults.headers.Authorization = `Bearer ${data.Dados.AccessToken}`;
+        
+        api.defaults.headers.common = {'Authorization': `Bearer ${data.Dados.AccessToken}`}
         setAuthenticated(true);
         setUsuarioLogadoId(data.Dados.User.Id);
         const jwt: Jwt = jwt_decode(data.Dados.AccessToken);
@@ -71,7 +72,7 @@ export default function LoginService() {
     setAuthenticated(false);
     setUsuarioLogadoId(undefined);
     localStorage.removeItem("token");
-    api.defaults.headers.Authorization = undefined;
+    api.defaults.headers.common = {};
   }
 
   return {

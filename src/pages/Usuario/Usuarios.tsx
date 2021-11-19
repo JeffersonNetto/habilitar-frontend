@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import Loader from "../../components/loader/Loader";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import localization from "../../helpers/material-table-localization";
 import UsuarioService from "../../services/UsuarioService";
@@ -10,8 +10,7 @@ import User from "../../models/User";
 import { Card, CardMedia } from "@material-ui/core";
 
 const Usuarios = () => {
-  const history = useHistory();
-  const { GetAll } = UsuarioService();
+  const navigate = useNavigate();
   const [usuarios, setUsuarios] = useState<User[] | undefined>([]);
   const columns = [
     {
@@ -36,7 +35,7 @@ const Usuarios = () => {
   ];
 
   useEffect(() => {
-    GetAll()
+    UsuarioService.GetAll()
       .then((response: CustomResponse<User[]>) => {
         setUsuarios(response.Dados);
       })
@@ -77,14 +76,16 @@ const Usuarios = () => {
             icon: "add",
             tooltip: "Adicionar usuário",
             isFreeAction: true,
-            onClick: (event) => history.push("/app/usuarios/criar"),
+            onClick: (event) => navigate("/app/usuarios/criar"),
           },
           {
             icon: "edit",
             tooltip: "Editar",
             onClick: (event, rowData) => {
               const usuario = rowData as User;
-              history.push(`/app/usuarios/editar/${usuario.Id}`, usuario);
+              navigate(`/app/usuarios/editar/${usuario.Id}`, {
+                state: usuario,
+              });
             },
           },
         ]}

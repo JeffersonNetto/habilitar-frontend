@@ -16,7 +16,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { Context } from "../../context/AuthContext";
 import Loader from "../loader/Loader";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import LoginViewModel from "../../view-models/LoginViewModel";
 import { ErrorResponse } from "../../helpers/Retorno";
 import CustomSnackbar, { AlertMessage } from "../snackbar/CustomSnackbar";
@@ -45,7 +45,7 @@ const Login = () => {
   }, []);
 
   const { handleLogin } = useContext(Context);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const classes = useStyles();
 
@@ -76,9 +76,9 @@ const Login = () => {
         });
         setOpen(true);
         setTimeout(() => {
-          history.push("/");
+          navigate("/");
         }, 1000);
-      } catch (error) {
+      } catch (error: any) {
         let err: ErrorResponse = error?.data;
         setAlertMessage({
           severity: "error",

@@ -25,7 +25,6 @@ let stateGrupo: Grupo;
 
 const GrupoForm = () => {
   const classes = useStyles();
-  const { Insert, Update } = GrupoService();
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
@@ -53,7 +52,9 @@ const GrupoForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          const Func = pathname.includes("editar") ? Update : Insert;
+          const Func = pathname.includes("editar")
+            ? GrupoService.Update
+            : GrupoService.Insert;
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
             .then((response: CustomResponse<Grupo>) => {

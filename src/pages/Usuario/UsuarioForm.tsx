@@ -21,8 +21,8 @@ import CustomSnackbar, {
 import { ErrorResponse } from "../../helpers/Retorno";
 import SupervisedUserCircleRounded from "@material-ui/icons/SupervisedUserCircleRounded";
 import { Card, CardMedia } from "@material-ui/core";
-import CustomSelect from "../../components/select/CustomSelect";
 import CustomDatePicker from "../../components/datepicker/CustomDatePicker";
+import SimpleSelect from "../../components/select/SimpleSelect";
 
 let stateUser: CreateUserViewModel;
 
@@ -34,7 +34,7 @@ function LimparInitialValues() {
   initialValues.PhoneNumber = "";
   initialValues.Nome = "";
   initialValues.Sobrenome = "";
-  initialValues.DataNascimento = undefined;
+  initialValues.DataNascimento = undefined as Date | undefined;
   initialValues.Sexo = "";
   initialValues.IntegracaoId = "";
   initialValues.Cpf = "";
@@ -44,7 +44,6 @@ function LimparInitialValues() {
 const UsuarioForm = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
-  const { Insert, Update } = UsuarioService();
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
@@ -61,10 +60,12 @@ const UsuarioForm = () => {
 
     if (pathname.includes("editar")) {
       stateUser = state as CreateUserViewModel;
-      Object.assign(initialValues, stateUser);
+      Object.assign(initialValues, {
+        ...stateUser,
+        DataNascimento: new Date(),
+      });
 
-      UsuarioService()
-        .ObterPerfil(initialValues.Id as string)
+      UsuarioService.ObterPerfil(initialValues.Id as string)
         .then((response) => {
           initialValues.Role = response;
         })
@@ -72,7 +73,7 @@ const UsuarioForm = () => {
     } else if (pathname.includes("criar")) {
       setLoading(false);
     }
-  }, []);
+  }, [pathname, state]);
 
   return loading ? (
     <>
@@ -100,7 +101,9 @@ const UsuarioForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
-          const Func = pathname.includes("editar") ? Update : Insert;
+          const Func = pathname.includes("editar")
+            ? UsuarioService.Update
+            : UsuarioService.Insert;
 
           try {
             await Func(values as any, initialValues.Id);
@@ -112,7 +115,7 @@ const UsuarioForm = () => {
                 : "Usuário inserido com sucesso",
             });
             setOpen(true);
-          } catch (error) {
+          } catch (error: any) {
             let err: ErrorResponse = error.response.data;
             setAlertMessage({
               severity: "error",
@@ -182,24 +185,24 @@ const UsuarioForm = () => {
                       />
                     </Grid>
                     <Grid item xs={12} sm={6} lg={3}>
-                      <CustomSelect
+                      <SimpleSelect
                         name="Sexo"
                         label="Sexo"
                         options={[
-                          { value: "F", text: "Feminino" },
-                          { value: "M", text: "Masculino" },
+                          { Value: "F", Text: "Feminino" },
+                          { Value: "M", Text: "Masculino" },
                         ]}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6} lg={3}>
-                      <CustomSelect
+                      <SimpleSelect
                         label="Perfil"
                         name="Role"
                         options={[
-                          { value: "Admin", text: "Admin" },
-                          { value: "Auxiliar", text: "Auxiliar" },
-                          { value: "Fisioterapeuta", text: "Fisioterapeuta" },
-                          { value: "Paciente", text: "Paciente" },
+                          { Value: "Admin", Text: "Admin" },
+                          { Value: "Auxiliar", Text: "Auxiliar" },
+                          { Value: "Fisioterapeuta", Text: "Fisioterapeuta" },
+                          { Value: "Paciente", Text: "Paciente" },
                         ]}
                       />
                     </Grid>

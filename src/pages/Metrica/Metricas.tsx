@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
 import Metrica from "../../models/Metrica";
 import MetricaService from "../../services/MetricaService";
 
 const Metricas = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [metricas, setMetricas] = useState<Metrica[] | undefined>();
-  const { GetAll, Delete } = MetricaService();
   const [open, setOpen] = useState(false);
   const [metricaExcluir, setMetricaExcluir] = useState<Metrica | undefined>();
 
@@ -35,7 +34,7 @@ const Metricas = () => {
   };
 
   useEffect(() => {
-    GetAll()
+    MetricaService.GetAll()
       .then((response: CustomResponse<Metrica[]>) => {
         if (response.Dados) {
           setMetricas(response.Dados);
@@ -91,14 +90,16 @@ const Metricas = () => {
             icon: "add",
             tooltip: "Adicionar métrica",
             isFreeAction: true,
-            onClick: (event) => history.push("/app/metricas/criar"),
+            onClick: (event) => navigate("/app/metricas/criar"),
           },
           {
             icon: "edit",
             tooltip: "Editar",
             onClick: (event, rowData) => {
               const metrica = rowData as Metrica;
-              history.push(`/app/metricas/editar/${metrica.Id}`, metrica);
+              navigate(`/app/metricas/editar/${metrica.Id}`, {
+                state: metrica,
+              });
             },
           },
           (rowData) => ({

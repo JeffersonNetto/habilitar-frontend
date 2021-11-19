@@ -25,7 +25,6 @@ let stateUnidade: Unidade;
 
 const UnidadeForm = () => {
   const classes = useStyles();
-  const { Insert, Update } = UnidadeService();
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
     severity: undefined,
@@ -53,7 +52,9 @@ const UnidadeForm = () => {
         onSubmit={(values, actions) => {
           values.Empresa = undefined;
 
-          const Func = pathname.includes("editar") ? Update : Insert;
+          const Func = pathname.includes("editar")
+            ? UnidadeService.Update
+            : UnidadeService.Insert;
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
             .then((response: CustomResponse<Unidade>) => {

@@ -3,16 +3,15 @@ import { useEffect, useState } from "react";
 import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
 import Empresa from "../../models/Empresa";
 import EmpresaService from "../../services/EmpresaService";
 import { Card, CardMedia } from "@material-ui/core";
 
 const Empresas = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [empresas, setEmpresas] = useState<Empresa[] | undefined>();
-  const { GetAll, Delete } = EmpresaService();
   const [open, setOpen] = useState(false);
   const [empresaExcluir, setEmpresaExcluir] = useState<Empresa | undefined>();
 
@@ -36,7 +35,7 @@ const Empresas = () => {
   };
 
   useEffect(() => {
-    GetAll()
+    EmpresaService.GetAll()
       .then((response: CustomResponse<Empresa[]>) => {
         if (response.Dados) {
           setEmpresas(response.Dados);
@@ -107,14 +106,16 @@ const Empresas = () => {
             icon: "add",
             tooltip: "Adicionar empresa",
             isFreeAction: true,
-            onClick: (event) => history.push("/app/empresas/criar"),
+            onClick: (event) => navigate("/app/empresas/criar"),
           },
           {
             icon: "edit",
             tooltip: "Editar",
             onClick: (event, rowData) => {
               const empresa = rowData as Empresa;
-              history.push(`/app/empresas/editar/${empresa.Id}`, empresa);
+              navigate(`/app/empresas/editar/${empresa.Id}`, {
+                state: empresa,
+              });
             },
           },
           (rowData) => ({
