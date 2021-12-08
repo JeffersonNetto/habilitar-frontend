@@ -10,6 +10,7 @@ export default interface Meta extends Entity {
   ExercicioId: number;
   QtdSeries: number;
   MetricaId: number;
+  MetricaQtd: number;
   IntervaloId: number;
   EmpresaId: number;
   FisioterapeutaId?: number;

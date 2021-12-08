@@ -9,6 +9,8 @@ import { useField } from 'formik';
 const CustomDatePicker = ({label, ...props}) => {
   const [field, meta, helpers] = useField(props);
 
+  
+
   return (
     <MuiPickersUtilsProvider
     locale={ptBR}

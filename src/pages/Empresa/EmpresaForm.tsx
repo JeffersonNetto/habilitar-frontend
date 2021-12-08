@@ -26,7 +26,6 @@ let stateEmpresa: Empresa;
 
 const EmpresaForm = () => {
   const classes = useStyles();
-  const { Insert, Update } = EmpresaService();
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
@@ -71,11 +70,12 @@ const EmpresaForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          const Func = pathname.includes("editar") ? Update : Insert;
+          const Func = pathname.includes("editar")
+            ? EmpresaService.Update
+            : EmpresaService.Insert;
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
             .then((response: CustomResponse<Empresa>) => {
-              console.log(response);
               setAlertMessage({
                 severity: "success",
                 message: pathname.includes("editar")

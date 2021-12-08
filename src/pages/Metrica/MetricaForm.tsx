@@ -25,7 +25,6 @@ let stateMetrica: Metrica;
 
 const MetricaForm = () => {
   const classes = useStyles();
-  const { Insert, Update } = MetricaService();
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
@@ -55,13 +54,12 @@ const MetricaForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          console.log(values);
-
-          const Func = pathname.includes("editar") ? Update : Insert;
+          const Func = pathname.includes("editar")
+            ? MetricaService.Update
+            : MetricaService.Insert;
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
             .then((response: CustomResponse<Metrica>) => {
-              console.log(response);
               setAlertMessage({
                 severity: "success",
                 message: pathname.includes("editar")

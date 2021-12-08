@@ -26,7 +26,6 @@ const initialValues: AlterarSenhaViewModel = {
 
 const AlterarSenha = () => {
   const classes = useStyles();
-  const { AlterarSenha } = UsuarioService();
   const { usuarioLogadoId } = useContext(Context);
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
@@ -45,13 +44,13 @@ const AlterarSenha = () => {
         })}
         onSubmit={async (values, actions) => {
           try {
-            await AlterarSenha(values, usuarioLogadoId);
+            await UsuarioService.AlterarSenha(values, usuarioLogadoId);
             setAlertMessage({
               severity: "success",
               message: "Senha alterada com sucesso",
             });
             setOpen(true);
-          } catch (error) {
+          } catch (error: any) {
             let err: ErrorResponse = error.response.data;
             setAlertMessage({
               severity: "error",

@@ -27,7 +27,6 @@ let stateExercicio: Exercicio;
 
 const ExercicioForm = () => {
   const classes = useStyles();
-  const { Insert, Update } = ExercicioService();
   const { pathname, state } = useLocation();
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
@@ -93,7 +92,9 @@ const ExercicioForm = () => {
             });
           });
 
-          const Func = pathname.includes("editar") ? Update : Insert;
+          const Func = pathname.includes("editar")
+            ? ExercicioService.Update
+            : ExercicioService.Insert;
 
           Func(values, initialValues.Id > 0 ? initialValues.Id : 0)
             .then((response: CustomResponse<Exercicio>) => {

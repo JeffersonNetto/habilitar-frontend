@@ -5,17 +5,17 @@ import Exercicio from "../../models/Exercicio";
 import ExercicioService from "../../services/ExercicioService";
 import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
 import { Card, CardMedia } from "@material-ui/core";
 
 const Exercicios = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [exercicios, setExercicios] = useState<Exercicio[] | undefined>();
-  const { GetAll, Delete } = ExercicioService();
   const [open, setOpen] = useState(false);
-  const [exercicioExcluir, setExercicioExcluir] =
-    useState<Exercicio | undefined>();
+  const [exercicioExcluir, setExercicioExcluir] = useState<
+    Exercicio | undefined
+  >();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,7 +37,7 @@ const Exercicios = () => {
   };
 
   useEffect(() => {
-    GetAll()
+    ExercicioService.GetAll()
       .then((response: CustomResponse<Exercicio[]>) => {
         if (response.Dados) {
           setExercicios(response.Dados);
@@ -110,14 +110,16 @@ const Exercicios = () => {
             icon: "add",
             tooltip: "Adicionar exercício",
             isFreeAction: true,
-            onClick: (event) => history.push("/app/exercicios/criar"),
+            onClick: (event) => navigate("/app/exercicios/criar"),
           },
           {
             icon: "edit",
             tooltip: "Editar",
             onClick: (event, rowData) => {
               const exercicio = rowData as Exercicio;
-              history.push(`/app/exercicios/editar/${exercicio.Id}`, exercicio);
+              navigate(`/app/exercicios/editar/${exercicio.Id}`, {
+                state: exercicio,
+              });
             },
           },
           (rowData) => ({

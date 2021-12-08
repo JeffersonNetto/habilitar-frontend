@@ -50,7 +50,6 @@ const UsuarioForm = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const { usuarioLogadoId } = useContext(Context);
-  const { Update, Get } = UsuarioService();
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
     severity: undefined,
@@ -66,7 +65,7 @@ const UsuarioForm = () => {
 
     (async () => {
       try {
-        const response = await Get(usuarioLogadoId);
+        const response = await UsuarioService.Get(usuarioLogadoId);
         Object.assign(initialValues, response.Dados);
       } catch (error: any) {
         let err: ErrorResponse = error.response.data;
@@ -86,7 +85,7 @@ const UsuarioForm = () => {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [usuarioLogadoId]);
 
   return loading ? (
     <>
@@ -101,13 +100,13 @@ const UsuarioForm = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
           try {
-            await Update(values as any, usuarioLogadoId);
+            await UsuarioService.Update(values as any, usuarioLogadoId);
             setAlertMessage({
               severity: "success",
               message: "Usuário alterado com sucesso",
             });
             setOpen(true);
-          } catch (error) {
+          } catch (error: any) {
             let err: ErrorResponse = error.response.data;
             setAlertMessage({
               severity: "error",

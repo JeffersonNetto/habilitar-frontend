@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
 import Grupo from "../../models/Grupo";
 import GrupoService from "../../services/GrupoService";
 
 const Grupos = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [grupos, setGrupos] = useState<Grupo[] | undefined>();
-  const { GetAll, Delete } = GrupoService();
   const [open, setOpen] = useState(false);
   const [grupoExcluir, setGrupoExcluir] = useState<Grupo | undefined>();
 
@@ -35,7 +34,7 @@ const Grupos = () => {
   };
 
   useEffect(() => {
-    GetAll()
+    GrupoService.GetAll()
       .then((response: CustomResponse<Grupo[]>) => {
         setGrupos(response.Dados);
         setTimeout(() => {}, 1000);
@@ -80,14 +79,14 @@ const Grupos = () => {
             icon: "add",
             tooltip: "Adicionar intervalo",
             isFreeAction: true,
-            onClick: (event) => history.push("/app/grupos/criar"),
+            onClick: (event) => navigate("/app/grupos/criar"),
           },
           {
             icon: "edit",
             tooltip: "Editar",
             onClick: (event, rowData) => {
               const grupo = rowData as Grupo;
-              history.push(`/app/grupos/editar/${grupo.Id}`, grupo);
+              navigate(`/app/grupos/editar/${grupo.Id}`, { state: grupo });
             },
           },
           (rowData) => ({

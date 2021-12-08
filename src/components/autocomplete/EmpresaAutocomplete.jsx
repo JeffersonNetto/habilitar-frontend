@@ -10,7 +10,7 @@ const EmpresaAutocomplete = ({ formik }) => {
   const [empresas, setEmpresas] = useState([]);
 
   useEffect(() => {
-    EmpresaService()
+    EmpresaService
       .GetAll()
       .then((response) => {
         setEmpresas(response.Dados);

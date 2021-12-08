@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 import { ErrorResponse, CustomResponse } from "../../helpers/Retorno";
 import Loader from "../../components/loader/Loader";
 import localization from "../../helpers/material-table-localization";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import ExclusaoDialog from "../../components/dialog/ExclusaoDialog";
 import Unidade from "../../models/Unidade";
 import UnidadeService from "../../services/UnidadeService";
 
 const Unidades = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [unidades, setUnidades] = useState<Unidade[] | undefined>();
-  const { GetAll, Delete } = UnidadeService();
   const [open, setOpen] = useState(false);
   const [unidadeExcluir, setUnidadeExcluir] = useState<Unidade | undefined>();
 
@@ -35,7 +34,7 @@ const Unidades = () => {
   };
 
   useEffect(() => {
-    GetAll()
+    UnidadeService.GetAll()
       .then((response: CustomResponse<Unidade[]>) => {
         if (response.Dados) {
           setUnidades(response.Dados);
@@ -93,14 +92,16 @@ const Unidades = () => {
             icon: "add",
             tooltip: "Adicionar unidade",
             isFreeAction: true,
-            onClick: (event) => history.push("/app/unidades/criar"),
+            onClick: (event) => navigate("/app/unidades/criar"),
           },
           {
             icon: "edit",
             tooltip: "Editar",
             onClick: (event, rowData) => {
               const unidade = rowData as Unidade;
-              history.push(`/app/unidades/editar/${unidade.Id}`, unidade);
+              navigate(`/app/unidades/editar/${unidade.Id}`, {
+                state: unidade,
+              });
             },
           },
           (rowData) => ({

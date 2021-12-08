@@ -10,7 +10,7 @@ const GrupoAutocomplete = ({ formik }) => {
   const [grupos, setGrupos] = useState([]);
 
   useEffect(() => {
-    GrupoService()
+    GrupoService
       .GetAll()
       .then((response) => {
         setGrupos(response.Dados);
